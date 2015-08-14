@@ -1,0 +1,45 @@
+.alert.alert-warning
+  Please dont delete without permission. Contact owner to delete. Thanks.
+
+%h2 Videos (#{@videos.count})
+
+%p.text-right
+  = link_to "Post New Video", new_admin_video_path, class: 'btn btn-primary'
+
+.clearfix
+  = paginate @videos
+
+%table.table.table-striped
+  %thead
+    %th
+    %th Title
+    %th Playable?
+    %th Category
+    %th Descrition
+    %th 
+  - @videos.each do |video|
+    %tr
+      %td.col-sm-1
+        - if video.thumbnail?
+          = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+        - else
+          = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+      %td=video.title
+      %td
+        - if video.playable?
+          %span.glyphicon.glyphicon-play
+        - else
+          %span.glyphicon.glyphicon-remove
+      %td
+        = video.category.try(:name)
+      %td.col-sm-2
+        = sanitize(truncate(video.description, :omission => "...", :length => 40))
+      %td.col-sm-2
+        = link_to edit_admin_video_path(video), class: "btn btn-info btn-sm" do
+          %span.glyphicon.glyphicon-pencil
+        = link_to video_path(video), class: "btn btn-info btn-sm" do
+          %span.glyphicon.glyphicon-eye-open
+        = link_to admin_video_path(video), class: "btn btn-danger btn-sm", method: :delete, data: { confirm: "Are you sure?" } do
+          %span.glyphicon.glyphicon-trash
+.clearfix
+  = paginate @videos

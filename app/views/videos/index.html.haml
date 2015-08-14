@@ -1,0 +1,41 @@
+- content_for :sidebar do
+  = render 'sidebar'
+
+- content_for :before_content do
+  #carousel
+    .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 5000, slides: '>a' } }
+      - random_subtitles(8).each do |subtitle|
+        = link_to video_path(subtitle.video, subtitle_id: subtitle.id) do
+          = image_tag subtitle.thumbnail.thumb.url, title: subtitle.title, style: 'max-width: 150px;'
+          %span.subtitle
+            = truncate(subtitle.title, :omission => "...", :length => 12)
+.clearfix
+  - if @title
+    %h4
+      = @title
+  - if @category
+    %h4
+      %span.glyphicon.glyphicon-folder-open
+      &nbsp;
+      =@category.name
+
+  - if @tag
+    %h4
+      %span.glyphicon.glyphicon-tags
+      &nbsp;
+      = @tag
+  - if params[:search]
+    %h4
+      %span.glyphicon.glyphicon-search
+      &nbsp;
+      = params[:search]
+
+- if @videos.count > 0
+  = render 'list'
+
+  .clearfix
+    = paginate @videos
+- else
+  .row
+    .alert.alert-warning
+      Sorry, There is no matched videos.

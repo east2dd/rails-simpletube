@@ -1,0 +1,164 @@
+$icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
+@import "rails_bootstrap_forms";
+@import "bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
+// Core variables and mixins
+@import "bootstrap/variables";
+@import "variables";
+@import "bootstrap/mixins";
+
+// Reset and dependencies
+@import "bootstrap/normalize";
+@import "bootstrap/print";
+@import "bootstrap/glyphicons";
+
+// Core CSS
+@import "bootstrap/scaffolding";
+@import "bootstrap/type";
+@import "bootstrap/code";
+@import "bootstrap/grid";
+@import "bootstrap/tables";
+@import "bootstrap/forms";
+@import "bootstrap/buttons";
+
+// Components
+@import "bootstrap/component-animations";
+@import "bootstrap/dropdowns";
+@import "bootstrap/button-groups";
+@import "bootstrap/input-groups";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+@import "bootstrap/pager";
+@import "bootstrap/labels";
+@import "bootstrap/badges";
+@import "bootstrap/jumbotron";
+@import "bootstrap/thumbnails";
+@import "bootstrap/alerts";
+@import "bootstrap/progress-bars";
+@import "bootstrap/media";
+@import "bootstrap/list-group";
+@import "bootstrap/panels";
+@import "bootstrap/responsive-embed";
+@import "bootstrap/wells";
+@import "bootstrap/close";
+
+// Components w/ JavaScript
+@import "bootstrap/modals";
+@import "bootstrap/tooltip";
+@import "bootstrap/popovers";
+@import "bootstrap/carousel";
+
+// Utility classes
+@import "bootstrap/utilities";
+@import "bootstrap/responsive-utilities";
+
+h1, h2, h3, h4, h5{
+  font-family: Arial, Helvetica;
+}
+
+ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#before_content{
+  //background-color: rgba(242,242,242,0.6);
+  background: #333;
+}
+
+.navbar{
+  margin-bottom: 0;
+}
+
+#carousel{
+  padding: 1rem 0;
+  a.cycle-slide{
+    position: relative;
+    color: #fff;
+    span{
+      bottom: 0;
+      text-align: center;
+      display: block;
+      width: 100%;
+      z-index:99999;
+      background: $navbar-inverse-bg;
+    }
+  }
+}
+
+h3.page-title{
+  margin-top: 0;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.page-title{
+  border-bottom: 1px solid rgba(242,242,242,0.6);
+}
+
+body{
+  background: rgba(242,242,242,0.6);
+}
+#content-wrapper{
+  background: #fff;
+}
+#content{
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+footer{
+  padding: 5rem 0;
+  background: rgba(242,242,242,0.6);
+  color: #333;
+}
+
+.item{
+  margin-bottom: 2rem;
+}
+
+em{
+  font-size: 1.2em;
+}
+
+#tags{
+  a{
+    padding: 0 0.3rem;
+  }
+}
+
+.video{
+  h4.title{
+    margin: 0;
+    padding: 0;
+  }
+  img{
+    margin-bottom: 1rem;
+  }
+}
+.css1 { font-size: 1.0em; }
+.css2 { font-size: 1.3em; }
+.css3 { font-size: 1.6em; }
+.css4 { font-size: 1.9em; }
+
+#sidebar{
+  border-right: 1px solid #e2e2e2;
+  padding-right: 2rem;
+  li{
+    padding: 0.2rem;
+  }
+
+  #views, #categories, #archives{
+    a{
+      display: block;
+    }
+  }
+  
+  .active{
+    a{
+      background: #e2e2e2;
+      padding: 0.5rem;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+.navbar.navbar-inverse
+  .navbar-header
+    %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    = link_to "WeTube", "/", class: 'navbar-brand'
+  #bs-example-navbar-collapse-1.collapse.navbar-collapse
+    %ul.nav.navbar-nav
+      %li{class: "#{'active' if @category.blank?}"}
+
+        = link_to videos_path do
+          %span.glyphicon.glyphicon-film
+          Videos
+      %li
+        = link_to subtitles_path do
+          %span.glyphicon.glyphicon-subtitles
+          Subtitles
+      %li
+        = link_to favorites_path do
+          %span.glyphicon.glyphicon-star
+          Favorites
+      %li
+        - if current_user
+          -if current_user.playlist
+            = link_to playlist_path(current_user.playlist) do
+              %span.glyphicon.glyphicon-play
+              Playlist
+          - else
+            = link_to playlists_path, method: :post do
+              %span.glyphicon.glyphicon-play
+              Playlist
+        - else
+          = link_to playlists_path do
+            %span.glyphicon.glyphicon-play
+            Playlist
+
+    %ul.nav.navbar-nav.navbar-right
+      - if user_signed_in?
+        %li
+          = link_to edit_user_registration_path do
+            #{current_user.full_name}
+        %li
+          = link_to 'Logout', destroy_user_session_path, method: :delete
+      - else
+        %li
+          = link_to 'Login / Register', new_user_session_path
+      %li
+        = link_to "Post New Video", new_admin_video_path, class: 'btn btn-primary'

@@ -1,0 +1,29 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  database: mytv_development
+  pool: 5
+  username: root
+  password: 
+  host: 127.0.0.1
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  database: mytv_test
+  pool: 10
+  username: 
+  password: 
+  host: 127.0.0.1
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  database: mytv
+  pool: 5
+  username: 
+  password: 
+  host: 127.0.0.1

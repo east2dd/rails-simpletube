@@ -1,0 +1,70 @@
+- content_for :before_content do
+  #carousel
+    .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
+      - random_subtitles(8).each do |subtitle|
+        = link_to video_path(subtitle.video, subtitle_id: subtitle.id) do
+          = image_tag subtitle.thumbnail.thumb.url, title: subtitle.title, style: 'max-width: 150px;'
+
+
+%h4
+  Filtered By:
+  = @tag || "None"
+%hr
+.clearfix
+  = paginate @videos
+
+.row
+  - @videos.each_with_index do |video, index|
+    .col-sm-4
+      .item
+        = link_to video_path(video.id) do
+          - if video.thumbnail?
+            = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+          - else
+            = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+        %h4
+          = link_to video_path(video.id) do
+            - if video.subtitles.count > 0
+              .glyphicon.glyphicon-thumbs-up
+            = video.title
+
+            
+        %p
+          = link_to download_video_path(video), target: '_blank' do
+            %span.glyphicon.glyphicon-download-alt
+            Download
+        %p
+          .glyphicon.glyphicon-time
+          = Time.at(video.duration).utc.strftime("%H:%M:%S")
+          
+          %br
+
+          = video.subtitles.count
+          subtitles
+          
+          = link_to 'edit', edit_admin_video_path(video)
+          %br
+        %p
+          %small
+            %span.glyphicon.glyphicon-tags
+            = video.tag_list
+          %br
+        %p
+          
+          %small
+            %span.glyphicon.glyphicon-file
+            Posted
+            = time_ago_in_words(video.created_at)
+            ago
+        %p
+          = sanitize(truncate(video.description, :omission => "...", :length => 40))
+    - if (index+1) % 3 == 0
+      .clearfix
+
+.clearfix
+  = paginate @videos
+
+%br
+%br
+%hr
+= render 'shared/recent_subtitles'

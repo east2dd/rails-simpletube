@@ -1,0 +1,70 @@
+#views
+  - if @video or @subtitles
+    %ul
+      %li{class: "#{'active' if @sort_by==nil || @sort_by=='created_at'}"}
+        = link_to videos_path(sort_by: 'created_at', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-calendar
+          Recent
+      %li{class: "#{'active' if @sort_by=='votes_score'}"}
+        = link_to videos_path(sort_by: 'votes_score', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-fire
+          Top rated
+      %li{class: "#{'active' if @sort_by=='impressions_count'}"}
+        = link_to videos_path(sort_by: 'impressions_count', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-eye-open
+          Most viewed
+      %li{class: "#{'active' if @sort_by=='upvotes_count'}"}
+        = link_to videos_path(sort_by: 'upvotes_count', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-thumbs-up
+          Recommended
+    
+  - else
+    %ul
+      %li{class: "#{'active' if @sort_by==nil || @sort_by=='created_at'}"}
+        = link_to url_for(sort_by: 'created_at', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-calendar
+          Recent
+      %li{class: "#{'active' if @sort_by=='votes_score'}"}
+        = link_to url_for(sort_by: 'votes_score', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-fire
+          Top rated
+      %li{class: "#{'active' if @sort_by=='impressions_count'}"}
+        = link_to url_for(sort_by: 'impressions_count', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-eye-open
+          Most viewed
+      %li{class: "#{'active' if @sort_by=='upvotes_count'}"}
+        = link_to url_for(sort_by: 'upvotes_count', sort_direction: 'desc') do
+          %span.glyphicon.glyphicon-thumbs-up
+          Recommended
+      
+%br
+#categories
+  %h4 Categories
+  %ul
+    - Category.nested_set_scope.each do |category|
+      %li{class: "#{'active' if @category.try(:id)==category.id}"}
+        = link_to category_videos_path(category) do
+          = category.name
+%br
+#archives
+  %h4 Archives
+  %ul
+    %li{class: "#{'active' if params[:start_date]==Time.now.strftime('%Y-%m-%d')}"}
+      = link_to url_for(start_date: Time.now.strftime('%Y-%m-%d'), end_date: nil) do
+        Today
+    %li{class: "#{'active' if params[:start_date]==Time.now.beginning_of_week.strftime('%Y-%m-%d')}"}
+      = link_to url_for(start_date: Time.now.beginning_of_week.strftime('%Y-%m-%d')) do
+        This week
+    %li{class: "#{'active' if params[:start_date]==7.days.ago.beginning_of_week.strftime('%Y-%m-%d')}"}
+      = link_to url_for(start_date: 7.days.ago.beginning_of_week.strftime('%Y-%m-%d'), end_date: 7.days.ago.end_of_week.strftime('%Y-%m-%d')) do
+        Last week
+    %li{class: "#{'active' if params[:start_date]==Time.now.beginning_of_month.strftime('%Y-%m-%d')}"}
+      = link_to url_for(start_date: Time.now.beginning_of_month.strftime('%Y-%m-%d')) do
+        This month
+
+%br
+#tags
+  %h4 Tag cloud
+
+  - tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class|
+    = link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class

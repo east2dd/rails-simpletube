@@ -1,0 +1,38 @@
+#recent
+  %h3.page-title SUBTITLES
+  .row
+    - subtitles = Subtitle.where(video_id: @videos.map(&:id)).recent[0..3] rescue Subtitle.recent[0..3]
+    - if subtitles.count > 0
+      - subtitles.each do |subtitle|
+        - video = subtitle.video
+        .col-sm-3.col-xs-6
+          = link_to video_path(video, subtitle_id: subtitle.id) do
+            - if video.thumbnail?
+              = image_tag subtitle.thumbnail.thumb.url, class: "img-responsive"
+            - else
+              = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+          %h4
+            = link_to video_path(video, subtitle_id: subtitle.id) do
+              = subtitle.title
+          %p
+            %small
+              %span.glyphicon.glyphicon-film
+              = subtitle.video.title
+            %br
+
+            %small
+              %span.glyphicon.glyphicon-time
+              = Time.at(video.duration).utc.strftime("%H:%M:%S")
+
+            %br
+            
+            %small
+              %span.glyphicon.glyphicon-file
+              Posted
+              = time_ago_in_words(subtitle.created_at)
+              ago
+          %p
+            = sanitize(truncate(video.description, :omission => "...", :length => 40))
+    - else
+      .alert.alert-warning
+        There is no matched subtitles.

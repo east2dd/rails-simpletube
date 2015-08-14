@@ -1,0 +1,78 @@
+- if @videos.count > 0
+  - @videos.each_with_index do |video, index|
+    .item.video
+      .row
+        .col-sm-2
+          = link_to video_path(video.id) + '#title' do
+            - if video.thumbnail?
+              = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+            - else
+              = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+          
+        .col-sm-10
+          %h4.title
+            = link_to video_path(video.id) + '#title' do
+              - if video.subtitles.count > 0
+                .glyphicon.glyphicon-thumbs-up
+              - if video.marked_as? :favorite, :by => current_user
+                %span.glyphicon.glyphicon-star-empty
+              = video.title
+          %p
+            %small.text-primary
+              %span.glyphicon.glyphicon-thumbs-up
+              = video.get_upvotes.count
+            &nbsp;
+            %small.text-danger
+              %span.glyphicon.glyphicon-thumbs-down
+              = video.get_downvotes.count
+            &nbsp;
+            %small
+              %span.glyphicon.glyphicon-time
+              = Time.at(video.duration).utc.strftime("%H:%M:%S")
+            &nbsp;
+            %small
+              %span.glyphicon.glyphicon-tags
+              - if video.tags.count > 0
+                = video.tag_list
+              - else
+                NONE
+            &nbsp;
+            %small
+              %span.glyphicon.glyphicon-file
+              = time_ago_in_words(video.created_at)
+              ago
+            &nbsp;
+            - if video.user
+              %small
+                %span.glyphicon.glyphicon-user
+                Posted by #{video.user.email}
+              &nbsp;
+            - if video.subtitles.count > 0
+              %small
+                %span.glyphicon.glyphicon-list
+                = video.subtitles.count
+                subtitles
+            %small
+              %span.glyphicon.glyphicon-eye-open
+              = video.impressionist_count
+              visits (today #{video.impressionist_count(:start_date=>Time.now.strftime("%Y-%m-%d"))})
+
+            &nbsp;
+          %p
+            - video.subtitles.each do |subtitle|
+              - video = subtitle.video
+              |
+              = link_to video_path(video, subtitle_id: subtitle.id) do
+                = subtitle.title
+          %p
+            = link_to wide_video_path(video), class: 'btn btn-info btn-xs' do
+              %span.glyphicon.glyphicon-fullscreen
+
+            - unless video.marked_as? :favorite, :by => current_user
+              = link_to favorite_video_path(video), method: :post, class: 'btn btn-warning btn-xs' do
+                %span.glyphicon.glyphicon-star
+
+            = link_to edit_admin_video_path(video) + '#title', class: 'btn btn-primary btn-xs' do
+              %span.glyphicon.glyphicon-pencil
+          %p
+            = sanitize(truncate(video.description, :omission => "...", :length => 40))

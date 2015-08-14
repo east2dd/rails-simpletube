@@ -1,0 +1,16 @@
+#search
+  #archives
+    %h4 Archives
+    %ul
+      %li{class: "#{'active' if params[:start_date]==Time.now.strftime('%Y-%m-%d')}"}
+        = link_to url_for(start_date: Time.now.strftime('%Y-%m-%d'), end_date: nil) do
+          Today
+      %li{class: "#{'active' if params[:start_date]==Time.now.beginning_of_week.strftime('%Y-%m-%d')}"}
+        = link_to url_for(start_date: Time.now.beginning_of_week.strftime('%Y-%m-%d')) do
+          This week
+      %li{class: "#{'active' if params[:start_date]==7.days.ago.beginning_of_week.strftime('%Y-%m-%d')}"}
+        = link_to url_for(start_date: 7.days.ago.beginning_of_week.strftime('%Y-%m-%d'), end_date: 7.days.ago.end_of_week.strftime('%Y-%m-%d')) do
+          Last week
+      %li{class: "#{'active' if params[:start_date]==Time.now.beginning_of_month.strftime('%Y-%m-%d')}"}
+        = link_to url_for(start_date: Time.now.beginning_of_month.strftime('%Y-%m-%d')) do
+          This month

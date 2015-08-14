@@ -1,0 +1,21 @@
+%h2 Categories
+%p.text-right
+  = link_to "New Category", new_admin_category_path, class: 'btn btn-primary'
+%table.table.table-striped
+  %thead
+    %th Name
+    %th Position
+    %th Videos
+    %th
+  - Category.nested_set_scope.each do |category|
+    %tr
+      %td
+        = '-' * category.level
+        = category.name
+      %td
+        = category.position
+      %td
+        = category.videos.count
+      %td
+        = link_to 'Edit', edit_admin_category_path(category), class: 'btn btn-info'
+        = link_to 'Delete', admin_category_path(category), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'

@@ -1,0 +1,15 @@
+{
+  "name": "wecollect",
+  "version": "0.0.0",
+  "authors": [
+    "xing <xingxing2d@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass": null,
+    "masonry": null,
+    "jquery-cycle2": null,
+    "imagesloaded": null
+  }
+}

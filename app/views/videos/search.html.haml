@@ -1,0 +1,89 @@
+- content_for :before_content do
+  .container
+    .col-sm-12
+      #carousel
+        .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 5000, slides: '>a' } }
+          - random_subtitles(8).each do |subtitle|
+            = link_to video_path(subtitle.video, subtitle_id: subtitle.id) do
+              = image_tag subtitle.thumbnail.thumb.url, title: subtitle.title, style: 'max-width: 150px;'
+              %span.subtitle
+                = truncate(subtitle.title, :omission => "...", :length => 12)
+
+- if params[:search]
+  %h3
+    %span.glyphicon.glyphicon-search
+    &nbsp;
+    = params[:search]
+    
+.clearfix
+  = paginate @videos
+
+- if @videos.count > 0
+  - @videos.each_with_index do |v, index|
+    - video = Video.find(v._id)
+    .item.row.video
+      .col-sm-2
+        = link_to video_path(video.id) + '#title' do
+          - if video.thumbnail?
+            = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+          - else
+            = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+          
+      .col-sm-9
+        %h4.title
+          - if v.try(:highlight).try(:title)
+            = link_to video_path(video.id) do
+              - if video.subtitles.count > 0
+                .glyphicon.glyphicon-thumbs-up
+              - v.highlight.title.each do |snippet|
+                = snippet.html_safe
+          - else
+            = link_to video_path(video.id) do
+              - if video.subtitles.count > 0
+                .glyphicon.glyphicon-thumbs-up
+              = video.title
+        %p
+          %small
+            %span.glyphicon.glyphicon-time
+            = Time.at(video.duration).utc.strftime("%H:%M:%S")
+          &nbsp;
+          %small
+            %span.glyphicon.glyphicon-tags
+            - if video.tags.count > 0
+              = video.tag_list
+            - else
+              NONE
+          &nbsp;
+          %small
+            %span.glyphicon.glyphicon-list
+            = video.subtitles.count
+            subtitles
+          &nbsp;
+          %small
+            %span.glyphicon.glyphicon-file
+            Posted
+            = time_ago_in_words(video.created_at)
+            ago
+        %p
+          - if v.try(:highlight).try(:meta_tags)
+            - v.highlight.meta_tags.each do |snippet|
+              %p
+                = snippet.html_safe
+                \...
+          - else
+            = video.meta_tags
+        %p
+          - if v.try(:highlight).try(:description)
+            - v.highlight.description.each do |snippet|
+              %p
+                = snippet.html_safe
+                \...
+          - else
+            = sanitize(truncate(video.description, :omission => "...", :length => 40))
+
+  .clearfix
+    = paginate @videos
+- else
+  .row
+    .alert.alert-warning
+      Sorry, There is no matched videos.

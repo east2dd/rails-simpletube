@@ -1,0 +1,35 @@
+- video = subtitle.video
+.row.video
+  .col-sm-3
+    = link_to video_path(video, subtitle_id: subtitle.id) do
+      - if video.thumbnail?
+        = image_tag subtitle.thumbnail.thumb.url, class: "img-responsive"
+      - else
+        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+  .col-sm-9
+    %h4.title
+      = link_to video_path(video, subtitle_id: subtitle.id) do
+        = subtitle.title
+    %p
+      %small
+        %span.glyphicon.glyphicon-film
+        = subtitle.video.title
+      %br
+
+      %small
+        %span.glyphicon.glyphicon-time
+        = Time.at((subtitle.end_at||subtitle.video.duration) - subtitle.start_at).utc.strftime("%H:%M:%S")
+
+      %br
+      
+      %small
+        %span.glyphicon.glyphicon-file
+        Posted
+        = time_ago_in_words(subtitle.created_at)
+        ago
+      %br
+      =link_to add_to_playlist_subtitle_path(subtitle), method: :post do
+        %span.glyphicon.glyphicon-plus
+        playlist
+    %p
+      = sanitize(truncate(video.description, :omission => "...", :length => 40))

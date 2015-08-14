@@ -1,0 +1,160 @@
+%h2 Playlist
+- #ActiveModel::Serializer.serializer_for(@playlist.plays.map(&:playable)).new(@playlist.plays.map(&:playable)).to_json
+- plays = @playlist.plays.shuffle
+:javascript
+  var subtitles = #{plays.map(&:playable).to_json};
+  var videos = #{plays.map(&:video).to_json};
+  var current_subtitle_index = null;
+  var currentPlay = null;
+  var start_at = 0;
+  var repeat = false
+
+  var seekToVideo = function seekToVideo(index, rep){
+    repeat = rep
+    
+    var subtitle = $('#subtitle_' + index);
+    current_subtitle_index = index;
+    currentSubtitle = subtitles[index];
+
+
+    var player = $('#movie').get(0);
+    var source = $('source', player);
+
+    if ($(source).attr('src')!=videos[index].file.url){
+      $(source).attr('src', videos[index].file.url);
+      player.load();
+      player.play();
+    }
+    
+    $('#movie').get(0).currentTime = currentSubtitle.start_at;
+
+    updateCurrentSubtitleHtml(currentSubtitle);
+    $('.repeat .text').html('');
+    if(rep){
+      $('.repeat .text', subtitle).html('<small>repeating...</small>');
+    }else{
+      $('.repeat .text', subtitle).html('');
+    }
+  }
+
+  var updateCurrentSubtitleHtml = function(subtitle){
+    if(subtitle){
+      $('#subtitle').html(subtitle.title);
+      if(subtitle.description){
+        var description = subtitle.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+        $('#description').html(description);
+      }else{
+        $('#description').html('');
+      }
+    }
+  }
+
+  $(function(){
+    var movie = $('#movie').get(0);
+    var video = $('#movie').get(0);
+    for(var i=0;i<subtitles.length;i++){
+      subtitles[i].end_at = subtitles[i].end_at || videos[i].duration - 5;
+    }
+
+    $(movie).bind('timeupdate', function() {
+      if (currentSubtitle){
+        if (movie.currentTime > currentSubtitle.start_at && movie.currentTime > currentSubtitle.end_at && !repeat){
+          seekToVideo((current_subtitle_index + 1)%subtitles.length, false);
+        }
+      }
+
+      if(currentSubtitle && movie.currentTime > currentSubtitle.end_at && repeat==true){
+        movie.currentTime = currentSubtitle.start_at;
+      }
+    })
+
+    // display comments at start
+    $('.thread a').trigger('click');
+
+    // seek when press arrow keys
+    var frameTime = 5;
+    window.addEventListener('keydown', function (evt) {
+      if (true) { //or you can force it to pause here
+          if (evt.keyCode === 32) { //left arrow
+            movie.pause();
+            evt.preventDefault();
+            return;
+          }
+
+          if (evt.keyCode === 37) { //left arrow
+              if (movie.currentTime > 0) {
+                  //one frame back
+                  movie.currentTime -= frameTime;
+              }
+          } else if (evt.keyCode === 39) { //right arrow
+
+              if (movie.currentTime < movie.duration) {
+                  //one frame forward
+                  //Don't go past the end, otherwise you may get an error
+                  movie.currentTime = Math.min(movie.duration, movie.currentTime + frameTime);
+              }
+          }
+      }
+    });
+    
+    // play first video as default
+    seekToVideo(0, false);
+  });
+.row
+  .col-sm-6
+    %video#movie{:controls => "", :height => "auto", :poster => @playlist.plays.first.playable.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> true}
+      %source{:src => '', :type => "video/mp4"}
+
+    %h4#subtitle
+      =@subtitle.try(:title)
+    #description
+      = sanitize(simple_format(@subtitle.try(:description)))  
+  .col-sm-6
+    .row
+      - plays.map(&:playable).each_with_index do |subtitle, index|
+        .col-md-4.col-sm-4.col-xs-4
+          %div{ id: "subtitle_#{index}"}
+            %p
+              = link_to "#title", onclick: "seekToVideo(#{index}, false);" do
+                = image_tag subtitle.thumbnail.thumb.url, class: 'img-responsive'
+            %p.text-center
+              =link_to '#title', onclick: "seekToVideo(#{index}, !repeat);", class: 'repeat btn btn-xs' do
+                %span.glyphicon.glyphicon-repeat
+                %span.text
+              - if current_user && current_user.playlist.plays.include?(subtitle.play)
+                =link_to play_path(subtitle.play), method: :delete do
+                  %span.glyphicon.glyphicon-minus
+                  playlist
+              %br
+              %small
+                = Time.at((subtitle.end_at||subtitle.video.duration) - subtitle.start_at).utc.strftime("%H:%M:%S")
+              %br
+              %small
+                =subtitle.title
+                =link_to edit_admin_video_subtitle_path(subtitle.video, subtitle) do
+                  %span.glyphicon.glyphicon-edit
+                %br
+                = link_to video_path(subtitle.video) do
+                  %span.glyphicon.glyphicon-film
+                  = subtitle.video.title
+        - if (index+1)%3==0
+          .clearfix
+
+%h2 Other user's playlists
+%table.table.table-striped
+  - Playlist.all.each do |playlist|
+    -if playlist != current_user.try(:playlist)
+      %tr
+        %td.col-sm-2
+          = link_to playlist_path(playlist) do
+            = image_tag playlist.plays.first.playable.thumbnail_url, class: 'img-responsive'
+        %td
+          = link_to playlist_path(playlist) do
+            %span.glyphicon.glyphicon-play
+            = playlist.name
+        %td
+          = playlist.plays.map(&:playable).map(&:title).join(' ,')
+        %td
+          = playlist.user.try(:full_name)
+          %br
+          = playlist.user.try(:email)

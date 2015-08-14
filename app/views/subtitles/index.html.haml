@@ -1,0 +1,16 @@
+- content_for :sidebar do
+  = render 'sidebar'
+
+%h4
+  = @title || 'RECENT'
+
+- if @subtitles.count > 0
+  - @subtitles.each do |subtitle|
+    = render subtitle
+
+  .clearfix
+    = paginate @subtitles
+- else
+  .row
+    .alert.alert-warning
+      Sorry, There is no matched videos.

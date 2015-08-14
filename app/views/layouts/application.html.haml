@@ -1,0 +1,58 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %meta{charset: "utf-8"}
+    %title
+      WeTube
+      = "#{@video.title || @subtitle.title rescue ""}"
+    %meta{:content => "width=device-width, maximum-scale=1, user-scalable=no", "initial-scale" => "1.0", :name => "viewport"}/
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+
+  %body{class: "#{controller_name}_#{action_name}"}
+    #header
+      = render 'shared/header'
+
+    #before_content
+      = yield :before_content
+
+    .container
+      #message
+        .row
+          .col-xs-12
+            - flash.each do |type, message|
+              - next if type == :timedout  # ignore flash[:timeout] set by devise
+              .alert{ class: "alert-#{type} fade in", role: 'alert' }
+                %button.close{ "aria-hidden" => "true", "data-dismiss" => "alert", type: 'button' } ×
+                = message
+
+    #content-wrapper 
+      .container
+        #content
+          .clearfix
+            .pull-right
+              = bootstrap_form_tag url: search_videos_path, method: :get, layout: :inline do |f|
+                = f.text_field :search, hide_label: true
+                = f.button :search, class: 'btn btn-info' do
+                  %span.glyphicon.glyphicon-search
+                  Search
+                  
+          - if controller_name=='videos'
+            %h3.page-title VIDEOS
+          - if controller_name=='subtitles'
+            %h3.page-title SUBTITLES
+
+          
+          .row
+            - if content_for :sidebar
+              .col-sm-3
+                = render 'shared/sidebar'
+              .col-sm-9
+                = yield
+            - else
+              .col-sm-12
+                = yield
+
+    #footer
+      = render 'shared/footer'

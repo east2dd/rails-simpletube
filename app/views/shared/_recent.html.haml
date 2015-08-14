@@ -1,0 +1,26 @@
+#recent
+  %h3.page-title RECENT VIDEOS
+  .row
+    - Video.recent[0..3].each do |video|
+      .col-sm-3
+        = link_to video_path(video.id) do
+          - if video.thumbnail?
+            = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+          - else
+            = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+        %h4
+          = link_to video_path(video.id) do
+            = video.title
+        %p
+          .glyphicon.glyphicon-time
+          = Time.at(video.duration).utc.strftime("%H:%M:%S")
+
+          %br
+          
+          %small
+            %span.glyphicon.glyphicon-file
+            Posted
+            = time_ago_in_words(video.created_at)
+            ago
+        %p
+          = sanitize(truncate(video.description, :omission => "...", :length => 40))

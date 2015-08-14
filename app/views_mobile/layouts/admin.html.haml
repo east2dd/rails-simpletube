@@ -1,0 +1,26 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %meta{charset: "utf-8"}
+    %title Admin Panel
+    %meta{:content => "width=device-width, maximum-scale=1, user-scalable=no", "initial-scale" => "1.0", :name => "viewport"}/
+    = stylesheet_link_tag    "admin", :media => "all"
+    = javascript_include_tag "admin"
+    = csrf_meta_tags
+
+  %body{class: "#{controller_name}_#{action_name}"}
+    #header
+      = render 'admin/shared/header'
+      .container
+        .row
+          .col-sm-12
+            - flash.each do |type, message|
+              - next if type == :timedout  # ignore flash[:timeout] set by devise
+              .alert{ class: "alert-#{type} fade in", role: 'alert' }
+                %button.close{ "aria-hidden" => "true", "data-dismiss" => "alert", type: 'button' } ×
+                = message
+      .container
+        = yield
+
+    #footer
+      = render 'admin/shared/footer'

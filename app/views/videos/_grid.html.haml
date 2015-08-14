@@ -1,0 +1,49 @@
+- @videos.each_with_index do |video, index|
+  .col-sm-4.col-xs-6
+    .item
+      = link_to video_path(video.id) + '#title' do
+        - if video.thumbnail?
+          = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+        - else
+          = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+      %h4
+        = link_to video_path(video.id) + '#title' do
+          - if video.subtitles.count > 0
+            .glyphicon.glyphicon-thumbs-up
+          = video.title
+      %p
+        = link_to download_video_path(video), target: '_blank' do
+          %span.glyphicon.glyphicon-download-alt
+          Download
+        &nbsp;
+        = link_to edit_admin_video_path(video) do
+          %span.glyphicon.glyphicon-pencil
+          Edit
+      %p
+        .glyphicon.glyphicon-time
+        = Time.at(video.duration).utc.strftime("%H:%M:%S")
+        
+        %br
+
+        = video.subtitles.count
+        subtitles
+      %p
+        %small
+          %span.glyphicon.glyphicon-tags
+          &nbsp;
+          - if video.tags.count > 0
+            = video.tag_list
+          - else
+            NONE
+        %br
+      %p
+        
+        %small
+          %span.glyphicon.glyphicon-file
+          Posted
+          = time_ago_in_words(video.created_at)
+          ago
+      %p
+        = sanitize(truncate(video.description, :omission => "...", :length => 40))
+  - if (index+1) % 3 == 0
+    .clearfix

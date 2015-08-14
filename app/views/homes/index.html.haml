@@ -1,0 +1,14 @@
+- @videos.each do |video|
+  .col-sm-3
+    = link_to video_path(video.id) do
+      - if video.thumbnail?
+        = image_tag video.thumbnail.thumb.url, class: "img-responsive"
+      - else
+        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
+    %h4
+      = link_to video_path(video.id) do
+        = video.title
+    %p= video.description
+    %p= Time.at(video.duration).utc.strftime("%H:%M:%S")
+    %p
+      %small= video.created_at

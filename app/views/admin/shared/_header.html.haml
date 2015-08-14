@@ -1,0 +1,12 @@
+.navbar.navbar-inverse
+  .navbar-header
+    = link_to "WeTube", "/", class: 'navbar-brand'
+  .collapse.navbar-collapse
+    %ul.nav.navbar-nav
+      %li{class: "#{'active' if controller_name == 'videos'}"}
+        = link_to "Videos", admin_videos_path
+      %li{class: "#{'active' if controller_name == 'categories'}"}
+        = link_to "Categories", admin_categories_path
+    %ul.nav.navbar-nav.navbar-right
+      %li
+        = link_to "Back to Home", videos_path
