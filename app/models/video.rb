@@ -1,3 +1,4 @@
+require "redis"
 class Video < ActiveRecord::Base
   acts_as_taggable
   acts_as_commontable
@@ -19,6 +20,7 @@ class Video < ActiveRecord::Base
   belongs_to :user
   has_one :play, as: :playable
 
+  has_many :photos
   after_create :encode_video_file
 
   validates_presence_of :title
@@ -47,6 +49,11 @@ class Video < ActiveRecord::Base
     movie.screenshot("tmp/thumbnail-#{self.id}-#{seconds}.jpg", :seek_time => seconds)
   end
 
+  def encoding_progress
+    redis = Redis.new
+    redis.get("video_encoding_progress_#{self.id}")
+  end
+
   def self.encode(id)
     video = Video.find(id)
     if !video.playable? and video.status!='encoding'
@@ -57,7 +64,11 @@ class Video < ActiveRecord::Base
       file_extension = File.extname(video.file.path)
       file_name = File.basename(video.file.path, file_extension)
       new_file_name = "tmp/#{file_name}-#{Time.now.to_s(:number)}.mp4"
-      video.file = movie.transcode(new_file_name){ |progress| puts progress }
+      redis = Redis.new
+      video.file = movie.transcode(new_file_name) do |progress|
+        redis.set("video_encoding_progress_#{id}", progress)
+        puts progress
+      end
       video.status = 'encoded'
       video.save
     end

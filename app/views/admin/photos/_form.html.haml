@@ -1,0 +1,20 @@
+.row
+  .col-md-6
+    %h4 #{@photo.title}
+    .well
+      = bootstrap_form_for [:admin, @photo], layout: :horizontal do |f|
+        = f.file_field :file, label: 'Photo'
+        = f.form_group do
+          = image_tag(@photo.file.thumb.url) if @photo.file?
+          = f.check_box :remove_file
+
+        = f.text_field :title
+        = f.text_area :description, rows: 6
+
+        = f.form_group do
+          = f.submit "Submit", class: 'btn btn-primary', data: { :disable_with => "Please Wait..." }
+          - if !@photo.new_record?
+            = link_to "Delete", admin_photo_path(@photo), class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' }
+  .col-md-6
+
+    = image_tag @photo.file.url, class: 'img-responsive'

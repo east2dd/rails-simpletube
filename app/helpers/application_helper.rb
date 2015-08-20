@@ -21,4 +21,16 @@ module ApplicationHelper
 
     records
   end
+
+  def random_photos(count)
+    records = []
+
+    (1..count).each do
+      offset = rand(Photo.count)
+      records << Photo.recent.offset(offset).first
+    end
+
+    records
+  end
+
 end

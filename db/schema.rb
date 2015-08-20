@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150813231234) do
+ActiveRecord::Schema.define(version: 20150819174103) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -109,6 +109,22 @@ ActiveRecord::Schema.define(version: 20150813231234) do
   add_index "marks", ["markable_id", "markable_type", "mark"], name: "index_marks_on_markable_id_and_markable_type_and_mark", using: :btree
   add_index "marks", ["marker_id", "marker_type", "mark"], name: "index_marks_on_marker_id_and_marker_type_and_mark", using: :btree
 
+  create_table "photos", force: :cascade do |t|
+    t.string   "title",       limit: 255
+    t.text     "description", limit: 65535
+    t.string   "file",        limit: 255
+    t.integer  "width",       limit: 4
+    t.integer  "height",      limit: 4
+    t.integer  "user_id",     limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "video_id",    limit: 4
+    t.integer  "video_at",    limit: 4
+  end
+
+  add_index "photos", ["user_id"], name: "index_photos_on_user_id", using: :btree
+  add_index "photos", ["video_id"], name: "index_photos_on_video_id", using: :btree
+
   create_table "playlists", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.integer  "user_id",    limit: 4
@@ -118,6 +134,14 @@ ActiveRecord::Schema.define(version: 20150813231234) do
 
   add_index "playlists", ["user_id"], name: "index_playlists_on_user_id", using: :btree
 
+  create_table "playlists_plays", force: :cascade do |t|
+    t.integer "play_id",     limit: 4
+    t.integer "playlist_id", limit: 4
+  end
+
+  add_index "playlists_plays", ["play_id"], name: "index_plays_playlists_on_play_id", using: :btree
+  add_index "playlists_plays", ["playlist_id"], name: "index_plays_playlists_on_playlist_id", using: :btree
+
   create_table "plays", force: :cascade do |t|
     t.string   "name",          limit: 255
     t.integer  "playable_id",   limit: 4
@@ -125,14 +149,6 @@ ActiveRecord::Schema.define(version: 20150813231234) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "plays_playlists", force: :cascade do |t|
-    t.integer "play_id",     limit: 4
-    t.integer "playlist_id", limit: 4
-  end
-
-  add_index "plays_playlists", ["play_id"], name: "index_plays_playlists_on_play_id", using: :btree
-  add_index "plays_playlists", ["playlist_id"], name: "index_plays_playlists_on_playlist_id", using: :btree
 
   create_table "subtitles", force: :cascade do |t|
     t.integer  "video_id",    limit: 4

@@ -31,6 +31,8 @@
           %span.glyphicon.glyphicon-play
         - else
           %span.glyphicon.glyphicon-remove
+          %br
+          = "#{video.encoding_progress}% encoded"
       %td
         = video.category.try(:name)
       %td

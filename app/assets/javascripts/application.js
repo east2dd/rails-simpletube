@@ -15,7 +15,9 @@
 //= require bootstrap-sass/assets/javascripts/bootstrap-sprockets
 //= require jquery-cycle2/build/jquery.cycle2.min
 //= require plugins/jquery.cycle2.carousel.min
+//= require photobox/photobox/jquery.photobox.js
 
 jQuery(function(){
   $('.slideshow').cycle();
 });
+

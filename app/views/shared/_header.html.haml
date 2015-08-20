@@ -8,20 +8,15 @@
     = link_to "WeTube", "/", class: 'navbar-brand'
   #bs-example-navbar-collapse-1.collapse.navbar-collapse
     %ul.nav.navbar-nav
-      %li{class: "#{'active' if @category.blank?}"}
-
+      %li{class: "#{'active' if controller_name == 'videos'}"}
         = link_to videos_path do
           %span.glyphicon.glyphicon-film
           Videos
-      %li
+      %li{class: "#{'active' if controller_name == 'subtitles'}"}
         = link_to subtitles_path do
           %span.glyphicon.glyphicon-subtitles
           Subtitles
-      %li
-        = link_to favorites_path do
-          %span.glyphicon.glyphicon-star
-          Favorites
-      %li
+      %li{class: "#{'active' if controller_name == 'playlists'}"}
         - if current_user
           -if current_user.playlist
             = link_to playlist_path(current_user.playlist) do
@@ -35,8 +30,22 @@
           = link_to playlists_path do
             %span.glyphicon.glyphicon-play
             Playlist
+      %li{class: "#{'active' if controller_name == 'favorites'}"}
+        = link_to favorites_path do
+          %span.glyphicon.glyphicon-star
+          Favorites
+      %li{class: "#{'active' if controller_name == 'photos'}"}
+        = link_to photos_path do
+          %span.glyphicon.glyphicon-picture
+          Photos
+      
 
     %ul.nav.navbar-nav.navbar-right
+      %li
+        = link_to "New Video", new_admin_video_path
+      %li
+        = link_to "New Photo", new_admin_photo_path
+
       - if user_signed_in?
         %li
           = link_to edit_user_registration_path do
@@ -46,5 +55,3 @@
       - else
         %li
           = link_to 'Login / Register', new_user_session_path
-      %li
-        = link_to "Post New Video", new_admin_video_path, class: 'btn btn-primary'

@@ -27,6 +27,7 @@ class SubtitlesController < ApplicationController
       @subtitle.create_play
     end
 
+    current_user.playlist||=current_user.create_playlist
     current_user.playlist.plays << @subtitle.play
     redirect_to playlist_path(current_user.playlist)
   end

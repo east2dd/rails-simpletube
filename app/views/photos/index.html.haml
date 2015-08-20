@@ -1,0 +1,18 @@
+%h3.page-title Photos
+.clearfix
+  .pull-right
+    = paginate @photos
+.row#gallery
+  - @photos.each_with_index do |photo, index|
+    .col-sm-3
+      = render photo
+    - if (index + 1)%4==0
+      .clearfix
+.clearfix
+  .pull-right
+    = paginate @photos
+
+:javascript
+  $(function(){
+    $('#gallery').photobox('a.photo',{ time: 0, loop: false });
+  });

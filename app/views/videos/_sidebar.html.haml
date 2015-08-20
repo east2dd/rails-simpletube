@@ -68,3 +68,16 @@
 
   - tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class|
     = link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class
+
+%br
+#photos
+  %h4 Photos
+  #carousel1
+    .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 5000, slides: '>a' } }
+      - random_photos(12).each do |photo|
+        = link_to photo_path(photo) do
+          = image_tag photo.file.thumb.url, title: photo.title, style: 'max-width: 250px;'
+  .text-right
+    = link_to photos_path do
+      %span.glyphicon.glyphicon-eye-open
+      view all photos

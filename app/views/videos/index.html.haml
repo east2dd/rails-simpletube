@@ -30,12 +30,19 @@
       &nbsp;
       = params[:search]
 
-- if @videos.count > 0
-  = render 'list'
 
-  .clearfix
-    = paginate @videos
+- if @videos.count > 0
+  #gallery
+    = render 'list'
+    .clearfix
+      = paginate @videos
 - else
   .row
     .alert.alert-warning
       Sorry, There is no matched videos.
+
+:javascript
+  $(function(){
+    $('#gallery').photobox('a.video',{ time:1000, zoomable: false, loop: false});
+  });
+  

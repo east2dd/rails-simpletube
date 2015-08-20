@@ -39,6 +39,7 @@ gem 'ffmpeg'
 gem 'streamio-ffmpeg'
 gem 'kaminari'
 gem 'sidekiq'
+gem "redis"
 
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'

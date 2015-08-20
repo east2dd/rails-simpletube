@@ -25,6 +25,8 @@
             = link_to "Show", video_path(@video), class: 'btn btn-info'
             - if !@video.playable?
               = link_to "Encode", encode_admin_video_path(@video), class: 'btn btn-warning', method: :patch
+              = "#{@video.encoding_progress}% encoded"
+
   .col-md-6
     - if @video.file?
       .row
@@ -63,10 +65,6 @@
 
 - @subtitle ||= Subtitle.find(params[:subtitle_id]) rescue nil
 :javascript
-  $(function(){
-    $('#movie').get(0).currentTime = "#{@subtitle.try(:start_at) rescue 0}";
-  });
-  
   function captureSubtitlePosition(){
     $('#movie').get(0).pause();
     if($('#subtitle_start_at').val())
@@ -85,4 +83,29 @@
   function seekToVideo(start_at){
     $('#movie').get(0).currentTime = start_at;
   }
+
+  $(function(){
+    var movie = $('#movie').get(0);
+    movie.currentTime = "#{@subtitle.try(:start_at) rescue 0}";
+    // seek when press arrow keys
+    var frameTime = 5;
+    window.addEventListener('keydown', function (evt) {
+      if (true) { //or you can force it to pause here
+          if (evt.keyCode === 37) { //left arrow
+              if (movie.currentTime > 0) {
+                  //one frame back
+                  movie.currentTime -= frameTime;
+              }
+          } else if (evt.keyCode === 39) { //right arrow
+
+              if (movie.currentTime < movie.duration) {
+                  //one frame forward
+                  //Don't go past the end, otherwise you may get an error
+                  movie.currentTime = Math.min(movie.duration, movie.currentTime + frameTime);
+              }
+          }
+      }
+    });
+  });
+  
   

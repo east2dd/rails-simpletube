@@ -122,6 +122,27 @@ class VideosController < ApplicationController
     'wide'
   end
 
+  def capture_photo
+    @video = Video.find(params[:id])
+    if !params[:video_at].blank?
+      @photo = Photo.new
+      @photo.file = @video.screen_shot_at(params[:video_at].to_f)
+      @photo.title = "#{@video.title} #{Time.now.to_f}"
+      @photo.video_at = params[:video_at].to_i
+      @photo.video = @video
+      @photo.save
+
+      redirect_to edit_admin_photo_path(@photo)
+    else
+      redirect_to :back
+    end
+  end
+
+  def embed
+    @video = Video.find(params[:id])
+    render :embed, layout: 'embed'
+  end
+
   private
   def set_category
     @category = Category.find(params[:category_id]) rescue nil

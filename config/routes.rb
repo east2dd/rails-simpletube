@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       end
     end
     resources :categories
+    resources :photos
   end
 
   resources :categories, only: [:show] do
@@ -30,10 +31,12 @@ Rails.application.routes.draw do
       get :download
       get :tag
       get :wide
+      get :embed
       put "like", to: "videos#upvote"
       put "dislike", to: "videos#downvote"
       post :favorite
       post :unfavorite
+      post :capture_photo
     end
   end
 
@@ -49,6 +52,7 @@ Rails.application.routes.draw do
 
   resources :playlists
   resources :plays
+  resources :photos
   
   get '/admin', to: 'admin/videos#index', as: 'admin_root'
   root to: "videos#index"

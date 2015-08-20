@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :videos
   
   has_one :playlist
+  has_many :photos
 
   def full_name
     return "UnNamed" if self.first_name.blank? && self.last_name.blank?

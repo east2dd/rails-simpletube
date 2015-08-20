@@ -53,6 +53,8 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 @import "bootstrap/utilities";
 @import "bootstrap/responsive-utilities";
 
+
+@import "photobox/photobox/photobox";
 h1, h2, h3, h4, h5{
   font-family: Arial, Helvetica;
 }
@@ -161,4 +163,17 @@ em{
       padding: 0.5rem;
     }
   }
+}
+
+.pbWrapper > div{
+  min-width: 820px;
+  height: 80%;
+}
+
+body#embed{
+  background: #fff;
+}
+
+.alert{
+  margin-top: 1rem;
 }

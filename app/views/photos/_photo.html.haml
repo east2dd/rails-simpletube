@@ -1,0 +1,36 @@
+.item.photo
+  .row
+    .col-sm-12
+      .visible-sm.visible-md.visible-lg
+        = link_to photo.file.full.url, class: 'photo' do
+          - if photo.file?
+            = image_tag photo.file.thumb.url, class: "img-responsive", alt: photo.title
+          - else
+            = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: photo.title
+      .visible-xs
+        = link_to photo_path(photo) do
+          - if photo.file?
+            = image_tag photo.file.thumb.url, class: "img-responsive", alt: photo.title
+          - else
+            = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: photo.title
+      
+      %h4.title
+        = link_to photo_path(photo) do
+          = photo.title
+      %p
+        %small
+          %span.glyphicon.glyphicon-file
+          = time_ago_in_words(photo.created_at)
+          ago
+        &nbsp;
+        - if photo.user
+          %small
+            %span.glyphicon.glyphicon-user
+            Posted by #{photo.user.email}
+          &nbsp;
+        - else
+          %small
+            %span.glyphicon.glyphicon-user
+            Posted by us
+      %p
+        = sanitize(truncate(photo.description, :omission => "...", :length => 40))

@@ -5,12 +5,21 @@
   = @title || 'RECENT'
 
 - if @subtitles.count > 0
-  - @subtitles.each do |subtitle|
-    = render subtitle
-
-  .clearfix
-    = paginate @subtitles
+  #gallery
+    .row
+      - @subtitles.each_with_index do |subtitle, index|
+        .col-sm-6
+          = render subtitle
+        - if (index+1)%2==0
+          .clearfix
+    .clearfix
+      = paginate @subtitles
+  
 - else
   .row
     .alert.alert-warning
       Sorry, There is no matched videos.
+:javascript
+  $(function(){
+    $('#gallery').photobox('a.video',{ time:1000, zoomable: false});
+  });
