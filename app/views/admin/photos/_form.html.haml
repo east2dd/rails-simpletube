@@ -10,6 +10,11 @@
 
         = f.text_field :title
         = f.text_area :description, rows: 6
+        = f.text_field :tag_list, value: f.object.tag_list.to_s
+
+        - if current_user && current_user.admin?
+          = f.form_group do
+            = f.check_box :featured
 
         = f.form_group do
           = f.submit "Submit", class: 'btn btn-primary', data: { :disable_with => "Please Wait..." }

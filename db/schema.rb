@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819174103) do
+ActiveRecord::Schema.define(version: 20150820153203) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20150819174103) do
     t.datetime "updated_at"
     t.integer  "video_id",    limit: 4
     t.integer  "video_at",    limit: 4
+    t.boolean  "featured",    limit: 1
   end
 
   add_index "photos", ["user_id"], name: "index_photos_on_user_id", using: :btree
@@ -198,6 +199,7 @@ ActiveRecord::Schema.define(version: 20150819174103) do
     t.datetime "updated_at",                                      null: false
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
+    t.boolean  "admin",                  limit: 1
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -221,9 +223,11 @@ ActiveRecord::Schema.define(version: 20150819174103) do
     t.integer  "upvotes_count",     limit: 4,     default: 0
     t.integer  "downvotes_count",   limit: 4,     default: 0
     t.integer  "votes_score",       limit: 4,     default: 0
+    t.boolean  "featured",          limit: 1
   end
 
   add_index "videos", ["category_id"], name: "index_videos_on_category_id", using: :btree
+  add_index "videos", ["featured"], name: "index_videos_on_featured", using: :btree
   add_index "videos", ["user_id"], name: "index_videos_on_user_id", using: :btree
 
   create_table "votes", force: :cascade do |t|

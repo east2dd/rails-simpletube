@@ -91,10 +91,13 @@
   = link_to video_path(@video), class: 'btn btn-primary pull-right', target: '_parent' do
     %span.glyphicon.glyphicon-send
     Open
+%p
+  .glyphicon.glyphicon-time
+  = Time.at(@video.duration).utc.strftime("%H:%M:%S")
 - if @video.subtitles.count > 0
   .row
     .col-sm-6
-      %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> true}
+      %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> false}
         %source{:src => @video.file.url, :type => "video/mp4"}
       - if @subtitle
         %h4#subtitle
@@ -126,7 +129,7 @@
 - else
   .row
     .col-sm-12
-      %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> true}
+      %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> false}
         %source{:src => @video.file.url, :type => "video/mp4"}
       - if @subtitle
         %h4#subtitle

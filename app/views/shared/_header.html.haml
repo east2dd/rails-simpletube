@@ -42,16 +42,25 @@
 
     %ul.nav.navbar-nav.navbar-right
       %li
-        = link_to "New Video", new_admin_video_path
+        = link_to new_admin_video_path do
+          %span.glyphicon.glyphicon-file
+          New Video
       %li
-        = link_to "New Photo", new_admin_photo_path
+        = link_to new_admin_photo_path do
+          %span.glyphicon.glyphicon-file
+          New Photo
 
       - if user_signed_in?
         %li
           = link_to edit_user_registration_path do
+            %span.glyphicon.glyphicon-user
             #{current_user.full_name}
         %li
-          = link_to 'Logout', destroy_user_session_path, method: :delete
+          = link_to destroy_user_session_path, method: :delete do
+            %span.glyphicon.glyphicon-off
+            Logout
       - else
         %li
-          = link_to 'Login / Register', new_user_session_path
+          = link_to new_user_session_path do
+            %span.glyphicon.glyphicon-log-in
+            Login / Register

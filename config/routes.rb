@@ -9,7 +9,11 @@ Rails.application.routes.draw do
       end
     end
     resources :categories
-    resources :photos
+    resources :photos do
+      collection do
+        get :featured
+      end
+    end
   end
 
   resources :categories, only: [:show] do
@@ -52,7 +56,14 @@ Rails.application.routes.draw do
 
   resources :playlists
   resources :plays
-  resources :photos
+  resources :photos do
+    member do
+      get :tag
+    end
+    collection do
+      get :search
+    end
+  end
   
   get '/admin', to: 'admin/videos#index', as: 'admin_root'
   root to: "videos#index"

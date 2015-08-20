@@ -32,7 +32,7 @@ class VideosController < ApplicationController
     @videos = @videos.where(category_id: @category.id) if !@category.blank?
     @videos = @videos.where("created_at >= ?", @start_date) if @start_date
     @videos = @videos.where("created_at <= ?", @end_date) if @end_date
-    @videos = @videos.page(params[:page])
+    @videos = @videos.page(params[:page]).per(12)
   end
 
   def search

@@ -29,24 +29,26 @@
     #content-wrapper 
       .container
         #content
-          .clearfix
-            .pull-right
-              = bootstrap_form_tag url: search_videos_path, method: :get, layout: :inline do |f|
-                = f.text_field :search, hide_label: true
-                = f.button :search, class: 'btn btn-info' do
-                  %span.glyphicon.glyphicon-search
-                  Search
-                  
+          = yield :search_box
           - if controller_name=='videos'
             %h3.page-title VIDEOS
           - if controller_name=='subtitles'
             %h3.page-title SUBTITLES
+          - if controller_name=='photos'
+            %h3.page-title Photos
 
           
           .row
             - if content_for :sidebar
               .col-sm-3
                 = render 'shared/sidebar'
+              
+                .visible-sm.visible-md.visible-lg
+                  %h4 Links
+                  = link_to "로동신문", "http://192.168.0.202/rodong", target: '_blank'
+                  %br
+                  = link_to "CRM", "http://192.168.0.202:8080/crm", target: '_blank'
+
               .col-sm-9
                 = yield
             - else

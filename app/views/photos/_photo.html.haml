@@ -17,6 +17,10 @@
       %h4.title
         = link_to photo_path(photo) do
           = photo.title
+
+        = link_to edit_admin_photo_path(photo), class: 'pull-right' do
+          %small
+            %span.glyphicon.glyphicon-edit
       %p
         %small
           %span.glyphicon.glyphicon-file
@@ -26,11 +30,14 @@
         - if photo.user
           %small
             %span.glyphicon.glyphicon-user
-            Posted by #{photo.user.email}
+            Posted by #{photo.user.full_name}
           &nbsp;
         - else
           %small
             %span.glyphicon.glyphicon-user
-            Posted by us
+            Posted by Unknown
+          &nbsp;
+
+
       %p
         = sanitize(truncate(photo.description, :omission => "...", :length => 40))

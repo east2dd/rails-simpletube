@@ -155,9 +155,9 @@
 
       
     .row
-      .col-sm-6
+      .col-sm-12
         %p
-          %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> true}
+          %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "#{@video.width < 1024? @video.width.to_s + "px" : "100%" rescue "100%"}", :autoplay=> true}
             %source{:src => @video.file.url, :type => "video/mp4"}
 
         = form_tag capture_photo_video_path(@video), id: 'photo_form' do
@@ -172,36 +172,40 @@
           =@subtitle.try(:title)
         #description
           = sanitize(simple_format(@video.description))
-
-      .col-sm-6
-        - @video.subtitles.each_with_index do |subtitle, index|
-          .col-md-4.col-sm-4.col-xs-4
-            %div{ id: "subtitle_#{index}"}
-              - if subtitle.id == @subtitle.try(:id)
-                :javascript
-                  setTimeout(function(){ seekToVideo(#{index}, false); }, 500);
-              %p
-                = link_to "#title", onclick: "seekToVideo(#{index}, false);" do
-                  = image_tag subtitle.thumbnail.thumb.url, class: 'img-responsive'
-              %p.text-center
-                =link_to '#title', onclick: "seekToVideo(#{index}, !repeat);", class: 'repeat btn btn-xs' do
-                  %span.glyphicon.glyphicon-repeat
-                  %span.text
-                - unless (current_user && current_user.playlist && current_user.playlist.plays.include?(subtitle.play))
-                  =link_to add_to_playlist_subtitle_path(subtitle), method: :post do
-                    %span.glyphicon.glyphicon-plus
-                    playlist
-                %br
-                %small
-                  = Time.at((subtitle.end_at||subtitle.video.duration) - subtitle.start_at).utc.strftime("%H:%M:%S")
-                %br
-                %small
-                  =subtitle.title
-                  =link_to edit_admin_video_subtitle_path(subtitle.video, subtitle) do
-                    %span.glyphicon.glyphicon-edit
-          - if (index+1)%3==0
-            .clearfix
-  
+        %hr
+    - if @video.subtitles.count > 0
+      .row
+        .col-sm-12
+          .row
+            - @video.subtitles.each_with_index do |subtitle, index|
+              .col-md-2.col-sm-3.col-xs-3
+                %div{ id: "subtitle_#{index}"}
+                  - if subtitle.id == @subtitle.try(:id)
+                    :javascript
+                      setTimeout(function(){ seekToVideo(#{index}, false); }, 500);
+                  %p
+                    = link_to "#title", onclick: "seekToVideo(#{index}, false);" do
+                      = image_tag subtitle.thumbnail.thumb.url, class: 'img-responsive'
+                  %p.text-center
+                    =link_to '#title', onclick: "seekToVideo(#{index}, !repeat);", class: 'repeat btn btn-xs' do
+                      %span.glyphicon.glyphicon-repeat
+                      %span.text
+                    - unless (current_user && current_user.playlist && current_user.playlist.plays.include?(subtitle.play))
+                      =link_to add_to_playlist_subtitle_path(subtitle), method: :post do
+                        %span.glyphicon.glyphicon-plus
+                        playlist
+                    %br
+                    %small
+                      = Time.at((subtitle.end_at||subtitle.video.duration) - subtitle.start_at).utc.strftime("%H:%M:%S")
+                    %br
+                    %small
+                      =subtitle.title
+                      =link_to edit_admin_video_subtitle_path(subtitle.video, subtitle) do
+                        %span.glyphicon.glyphicon-edit
+              - if (index+1)%6==0
+                .clearfix
     
-    = commontator_thread(@video)
+      %hr
+    .clearfix
+      = commontator_thread(@video)
 %br

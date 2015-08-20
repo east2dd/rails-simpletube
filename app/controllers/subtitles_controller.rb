@@ -17,7 +17,7 @@ class SubtitlesController < ApplicationController
     @subtitles = @subtitles.where(category_id: @category.id) if !@category.blank?
     @subtitles = @subtitles.where("created_at >= ?", @start_date) if @start_date
     @subtitles = @subtitles.where("created_at <= ?", @end_date) if @end_date
-    @subtitles = @subtitles.page(params[:page])
+    @subtitles = @subtitles.page(params[:page]).per(24)
   end
 
   def add_to_playlist

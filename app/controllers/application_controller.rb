@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_tags
-    @tags = Video.tag_counts_on(:tags)
+    @tags ||= Video.tag_counts_on(:tags)
   end
 
   def prepare_for_mobile

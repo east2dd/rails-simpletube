@@ -1,18 +1,23 @@
-%h2 Photos
+%h2 Photos (#{Photo.count})
 
-%p.text-right
-  = link_to "Post New Photo", new_admin_photo_path, class: 'btn btn-primary'
+%p.clearfix
+  = link_to "All photos", admin_photos_path
+  |
+  = link_to "Featured photos", featured_admin_photos_path
+  = link_to "Post New Photo", new_admin_photo_path, class: 'btn btn-primary pull-right'
 
 .clearfix
   = paginate @photos
 
-%table.table.table-striped
+%table.table
   - @photos.each do |photo|
-    %tr
-      %td
+    %tr{class: "#{"alert alert-info" if photo.featured?}"}
+      %td.col-sm-2
         = image_tag photo.file.thumb.url, class: 'img-responsive'
       %td=photo.title
       %td=sanitize(truncate(photo.description, :omission => "...", :length => 40))
+      %td=photo.tag_list
+      %td="Featured" if photo.featured?
       %td.text-right
         = link_to edit_admin_photo_path(photo), class: 'btn btn-primary' do
           %span.glyphicon.glyphicon-edit
@@ -21,3 +26,5 @@
         = link_to admin_photo_path(photo), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?'} do
           %span.glyphicon.glyphicon-trash
           Delete
+.clearfix
+  = paginate @photos

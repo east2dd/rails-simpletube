@@ -1,7 +1,4 @@
-.alert.alert-warning
-  Please dont delete without permission. Contact owner to delete. Thanks.
-
-%h2 Videos (#{@videos.count})
+%h2 Videos (#{Video.count})
 
 %p.text-right
   = link_to "Post New Video", new_admin_video_path, class: 'btn btn-primary'
