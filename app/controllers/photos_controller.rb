@@ -3,10 +3,15 @@ class PhotosController < ApplicationController
   before_filter :set_tags
 
   def index
-    @photos = Photo.recent.page(params[:page]).per(36)
+    @photos = Photo.recent.page(params[:page]).per(24)
   end
 
   def show
+  end
+
+  def featured
+    @photos = Photo.featured.recent.page(params[:page])
+    render :index
   end
 
   def tag_cloud
@@ -15,14 +20,14 @@ class PhotosController < ApplicationController
 
   def tag
     @photos = Photo.tagged_with(params[:id]).recent
-    @photos = @photos.page(params[:page]).per(36)
+    @photos = @photos.page(params[:page]).per(24)
     @tag = params[:id]
     render :index
   end
 
   def search
     @photos = Photo.search(params[:search])
-    @photos = @photos.page(params[:page]).per(36)
+    @photos = @photos.page(params[:page]).per(24)
   end
 
   def set_tags

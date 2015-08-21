@@ -26,6 +26,14 @@
               .alert{ class: "alert-#{type} fade in", role: 'alert' }
                 %button.close{ "aria-hidden" => "true", "data-dismiss" => "alert", type: 'button' } ×
                 = message
+          - unless current_user
+            %p.col-xs-12.text-center
+              %br
+              %strong
+                %i
+                  Great!, signed up users count hitted 10. thanks for joining us. still don't have wetube account? 
+                  = link_to "join us!", new_user_registration_path
+
     #content-wrapper 
       .container
         #content
@@ -41,19 +49,27 @@
           .row
             - if content_for :sidebar
               .col-sm-3
-                = render 'shared/sidebar'
+                #sidebar
+                  = render 'shared/sidebar'
               
-                .visible-sm.visible-md.visible-lg
-                  %h4 Links
-                  = link_to "로동신문", "http://192.168.0.202/rodong", target: '_blank'
+                  .visible-sm.visible-md.visible-lg
+                    %br
+                    %h4 Links
+                    = link_to "로동신문", "http://192.168.0.202/rodong", target: '_blank'
+                    %br
+                    = link_to "CRM", "http://192.168.0.202:8080/crm", target: '_blank'
+
                   %br
-                  = link_to "CRM", "http://192.168.0.202:8080/crm", target: '_blank'
+                  %br
+                  
 
               .col-sm-9
                 = yield
             - else
               .col-sm-12
                 = yield
-
+        %br
+        %br
+        %br
     #footer
       = render 'shared/footer'

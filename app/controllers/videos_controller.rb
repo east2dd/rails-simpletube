@@ -130,6 +130,7 @@ class VideosController < ApplicationController
       @photo.title = "#{@video.title} #{Time.now.to_f}"
       @photo.video_at = params[:video_at].to_i
       @photo.video = @video
+      @photo.user = current_user
       @photo.save
 
       redirect_to edit_admin_photo_path(@photo)

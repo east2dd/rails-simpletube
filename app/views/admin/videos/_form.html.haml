@@ -19,6 +19,8 @@
         = f.text_field :tag_list, value: f.object.tag_list.to_s
 
         = f.form_group do
+          = f.check_box :featured
+        = f.form_group do
           = f.submit "Submit", class: 'btn btn-primary', data: { :disable_with => "Please Wait..." }
           - if !@video.new_record?
             = link_to "Delete", admin_video_path(@video), class: "btn btn-danger", method: :delete, data: { confirm: "Are you sure?" }

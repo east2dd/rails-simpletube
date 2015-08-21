@@ -1,5 +1,6 @@
 %h3
   = @photo.title
-
+%p
+  = simple_format(@photo.description)
 %p
   = image_tag @photo.file.url, class: 'img-responsive'

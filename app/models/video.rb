@@ -14,6 +14,8 @@ class Video < ActiveRecord::Base
   scope :most_viewed, ->{ order('impressions_count DESC') }
   scope :most_scored, ->{ order('votes_score DESC') }
   scope :most_voted, ->{ order('upvotes_count DESC') }
+  scope :featured, ->{ where(featured: true) }
+  scope :encoded, ->{ where.not(status: 'encoding') }
 
   has_many :subtitles, -> { order('start_at ASC') }, dependent: :destroy
   belongs_to :category

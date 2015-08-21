@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       member do
         patch :encode
       end
+      collection do
+        get :featured
+      end
     end
     resources :categories
     resources :photos do
@@ -62,9 +65,17 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      get :featured
     end
   end
   
+  resources :users do
+    member do
+      get :photos
+      get :videos
+    end
+  end
+
   get '/admin', to: 'admin/videos#index', as: 'admin_root'
-  root to: "videos#index"
+  root to: "homes#index"
 end

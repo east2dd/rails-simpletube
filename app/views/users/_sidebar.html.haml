@@ -1,0 +1,10 @@
+%p
+  = image_tag @user.avatar.thumb.url, class: 'img-responsive'
+%p
+  Email:
+  = @user.email
+%p
+  = @user.videos.count
+  videos,
+  = @user.photos.count
+  photos

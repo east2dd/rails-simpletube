@@ -5,6 +5,11 @@
   = f.email_field :email, autofocus: true
   = f.text_field :first_name, autocomplete: "off"
   = f.text_field :last_name, autocomplete: "off"
+
+  = f.file_field :avatar
+
+  = image_tag f.object.avatar.thumb.url
+
   - if devise_mapping.confirmable? && resource.pending_reconfirmation?
     %div
       Currently waiting confirmation for: #{resource.unconfirmed_email}

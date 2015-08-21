@@ -10,6 +10,13 @@
   = paginate @photos
 
 %table.table
+  %thead
+    %th Photo
+    %th Title
+    %th Description
+    %th Tags
+    %th Featured
+    %th Actions
   - @photos.each do |photo|
     %tr{class: "#{"alert alert-info" if photo.featured?}"}
       %td.col-sm-2

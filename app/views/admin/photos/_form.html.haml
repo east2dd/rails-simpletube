@@ -22,4 +22,4 @@
             = link_to "Delete", admin_photo_path(@photo), class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' }
   .col-md-6
 
-    = image_tag @photo.file.url, class: 'img-responsive'
+    = image_tag @photo.file.preview.url, class: 'img-responsive'

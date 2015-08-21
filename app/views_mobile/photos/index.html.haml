@@ -1,0 +1,35 @@
+- content_for :sidebar do
+  = render 'sidebar'
+- content_for :search_box do
+  .clearfix
+    .pull-right
+      = bootstrap_form_tag url: search_photos_path, method: :get, layout: :inline do |f|
+        = f.text_field :search, hide_label: true, placeholder: 'Search photos'
+        = f.button :search, class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-search
+          Search
+- content_for :before_content do
+  #carousel.visible-sm.visible-md.visible-lg
+    .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
+      - Photo.featured.to_a.shuffle.each do |photo|
+        = link_to photo.file.url do
+          = image_tag photo.file.preview.url, title: photo.title, style: 'max-height: 340px;', alt: photo.title
+
+
+#gallery
+  .row
+    - @photos.each_with_index do |photo, index|
+      .col-sm-6
+        = render photo
+      - if (index+1)%2==0
+        .clearfix
+.clearfix
+  .pull-right
+    = paginate @photos
+
+:javascript
+  $(function(){
+    $('#gallery').photobox('a.photo',{ time: 0, loop: false });
+    $('#carousel').photobox('a',{ time: 0, loop: false });
+  });
+

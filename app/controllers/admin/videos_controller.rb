@@ -12,6 +12,11 @@ class Admin::VideosController < Admin::BaseController
   def tag
   end
 
+  def featured
+    @videos = Video.featured.recent.page(params[:page])
+    render :index
+  end
+
   def edit
   end
 
@@ -49,7 +54,7 @@ class Admin::VideosController < Admin::BaseController
 
   private
   def video_params
-    params.require(:video).permit(:title, :description, :file, :thumbnail, :tag_list, :category_id)
+    params.require(:video).permit(:title, :description, :file, :thumbnail, :tag_list, :category_id, :featured)
   end
 
   def set_video

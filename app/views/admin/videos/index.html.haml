@@ -1,12 +1,15 @@
 %h2 Videos (#{Video.count})
 
-%p.text-right
-  = link_to "Post New Video", new_admin_video_path, class: 'btn btn-primary'
+%p.clearfix
+  = link_to "All videos", admin_videos_path
+  |
+  = link_to "Featured videos", featured_admin_videos_path
+  = link_to "Post New Video", new_admin_video_path, class: 'btn btn-primary pull-right'
 
 .clearfix
   = paginate @videos
 
-%table.table.table-striped
+%table.table
   %thead
     %th
     %th Title
@@ -16,7 +19,7 @@
     %th Descrition
     %th 
   - @videos.each do |video|
-    %tr
+    %tr{class: "#{"alert alert-info" if video.featured?}"}
       %td.col-sm-1
         - if video.thumbnail?
           = image_tag video.thumbnail.thumb.url, class: "img-responsive"

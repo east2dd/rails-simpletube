@@ -1,0 +1,38 @@
+- content_for :sidebar do
+  = render 'sidebar'
+
+- content_for :search_box do
+  %h3.page-title
+    = @user.full_name
+
+- if @user.videos.count > 0
+  .row
+    .col-sm-6
+      %h4 Recent videos
+    .col-sm-6
+      %p.text-right
+        = link_to "View all videos (#{@user.videos.count})", videos_user_path(@user)
+  #gallery1
+    .row
+      - @user.videos.take(4).each do |video|
+        .col-sm-3
+          = render video
+  %hr
+- if @user.photos.count > 0
+  .row
+    .col-sm-6
+      %h4 Recent photos
+    .col-sm-6
+      %p.text-right
+        = link_to "View all photos (#{@user.photos.count})", photos_user_path(@user)
+  #gallery2
+    .row
+      - @user.photos.take(4).each do |photo|
+        .col-sm-3
+          = render photo
+
+:javascript
+  $(function(){
+    $('#gallery1').photobox('a.video',{ time: 0, loop: false });
+    $('#gallery2').photobox('a.photo',{ time: 0, loop: false });
+  });

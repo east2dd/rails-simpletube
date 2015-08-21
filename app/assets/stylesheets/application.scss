@@ -21,33 +21,33 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 @import "bootstrap/buttons";
 
 // Components
-@import "bootstrap/component-animations";
-@import "bootstrap/dropdowns";
-@import "bootstrap/button-groups";
-@import "bootstrap/input-groups";
+// @import "bootstrap/component-animations";
+// @import "bootstrap/dropdowns";
+// @import "bootstrap/button-groups";
+// @import "bootstrap/input-groups";
 @import "bootstrap/navs";
 @import "bootstrap/navbar";
-@import "bootstrap/breadcrumbs";
+// @import "bootstrap/breadcrumbs";
 @import "bootstrap/pagination";
 @import "bootstrap/pager";
 @import "bootstrap/labels";
 @import "bootstrap/badges";
-@import "bootstrap/jumbotron";
+// @import "bootstrap/jumbotron";
 @import "bootstrap/thumbnails";
 @import "bootstrap/alerts";
-@import "bootstrap/progress-bars";
+// @import "bootstrap/progress-bars";
 @import "bootstrap/media";
-@import "bootstrap/list-group";
-@import "bootstrap/panels";
+// @import "bootstrap/list-group";
+// @import "bootstrap/panels";
 @import "bootstrap/responsive-embed";
 @import "bootstrap/wells";
 @import "bootstrap/close";
 
 // Components w/ JavaScript
-@import "bootstrap/modals";
-@import "bootstrap/tooltip";
-@import "bootstrap/popovers";
-@import "bootstrap/carousel";
+// @import "bootstrap/modals";
+// @import "bootstrap/tooltip";
+// @import "bootstrap/popovers";
+// @import "bootstrap/carousel";
 
 // Utility classes
 @import "bootstrap/utilities";
@@ -55,6 +55,7 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
 
 
 @import "photobox/photobox/photobox";
+
 h1, h2, h3, h4, h5{
   font-family: Arial, Helvetica;
 }
@@ -176,4 +177,40 @@ body#embed{
 
 .alert{
   margin-top: 1rem;
+}
+
+#pbCaption .title{
+  font-size: 2.5rem;
+}
+
+#founders img{
+  border-radius: 50%;
+}
+
+#masonry-container {
+  background: #FFF;
+  padding: 0px;
+  margin-bottom: 20px;
+  clear: both;
+}
+
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+.founder{
+  margin-bottom: 1rem;
+}
+#masonry-container{
+  .box{
+    margin-bottom: 2rem;
+    padding: 0px;
+
+    .video{
+      padding-right: 1rem;
+    }
+    .photo{
+      padding-right: 1rem;
+    }
+  }
 }

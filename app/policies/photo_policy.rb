@@ -7,7 +7,10 @@ class PhotoPolicy
   end
 
   def update?
-    @photo.user == user or (user && user.admin?)
+    return true if @photo.user.blank?
+    return true if @photo.user == user
+    return false if @photo.user && @photo.user.admin? && (@photo.user!=user)
+    user.admin?
   end
 
   def destroy?

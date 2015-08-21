@@ -5,10 +5,10 @@
         = link_to videos_path(sort_by: 'created_at', sort_direction: 'desc') do
           %span.glyphicon.glyphicon-calendar
           Recent
-      %li{class: "#{'active' if @sort_by=='votes_score'}"}
-        = link_to videos_path(sort_by: 'votes_score', sort_direction: 'desc') do
-          %span.glyphicon.glyphicon-fire
-          Top rated
+      / %li{class: "#{'active' if @sort_by=='votes_score'}"}
+      /   = link_to videos_path(sort_by: 'votes_score', sort_direction: 'desc') do
+      /     %span.glyphicon.glyphicon-fire
+      /     Top rated
       %li{class: "#{'active' if @sort_by=='impressions_count'}"}
         = link_to videos_path(sort_by: 'impressions_count', sort_direction: 'desc') do
           %span.glyphicon.glyphicon-eye-open
@@ -24,10 +24,10 @@
         = link_to url_for(sort_by: 'created_at', sort_direction: 'desc') do
           %span.glyphicon.glyphicon-calendar
           Recent
-      %li{class: "#{'active' if @sort_by=='votes_score'}"}
-        = link_to url_for(sort_by: 'votes_score', sort_direction: 'desc') do
-          %span.glyphicon.glyphicon-fire
-          Top rated
+      / %li{class: "#{'active' if @sort_by=='votes_score'}"}
+      /   = link_to url_for(sort_by: 'votes_score', sort_direction: 'desc') do
+      /     %span.glyphicon.glyphicon-fire
+      /     Top rated
       %li{class: "#{'active' if @sort_by=='impressions_count'}"}
         = link_to url_for(sort_by: 'impressions_count', sort_direction: 'desc') do
           %span.glyphicon.glyphicon-eye-open
@@ -76,7 +76,7 @@
     .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 5000, slides: '>a' } }
       - Photo.featured.take(12).each do |photo|
         = link_to photo.file.url do
-          = image_tag photo.file.thumb.url, title: photo.title, style: 'max-width: 250px;'
+          = image_tag photo.file.thumb.url, title: photo.title, style: 'max-width: 250px;', alt: photo.title
   .text-right
     = link_to photos_path do
       %span.glyphicon.glyphicon-eye-open

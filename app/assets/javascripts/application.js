@@ -15,7 +15,16 @@
 //= require bootstrap-sass/assets/javascripts/bootstrap-sprockets
 //= require jquery-cycle2/build/jquery.cycle2.min
 //= require plugins/jquery.cycle2.carousel.min
+//= require plugins/jquery.infinitescroll
 //= require photobox/photobox/jquery.photobox.js
+//= require masonry/jquery.masonry
+//= require masonry/jquery.event-drag
+//= require masonry/jquery.imagesloaded.min
+//= require masonry/jquery.infinitescroll.min
+//= require masonry/modernizr-transitions
+//= require masonry/box-maker
+//= require masonry/jquery.loremimages.min
+//= require masonry/jquery.imagesloaded.min
 
 jQuery(function(){
   $('.slideshow').cycle();

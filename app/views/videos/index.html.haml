@@ -3,11 +3,11 @@
 - content_for :before_content do
   #carousel.visible-sm.visible-md.visible-lg
     .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
-      - random_subtitles(12).each do |subtitle|
-        = link_to video_path(subtitle.video, subtitle_id: subtitle.id) do
-          = image_tag subtitle.thumbnail.thumb.url, title: subtitle.title
+      - Video.featured.take(12).to_a.shuffle.each do |video|
+        = link_to video_path(video) do
+          = image_tag video.thumbnail.thumb.url, title: video.title
           %span.subtitle
-            = truncate(subtitle.title, :omission => "...", :length => 12)
+            = truncate(video.title, :omission => "...", :length => 12)
 - content_for :search_box do
   .clearfix
     .pull-right

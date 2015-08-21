@@ -1,0 +1,43 @@
+.video
+  .visible-sm.visible-md.visible-lg
+    = link_to embed_video_path(video), class: 'video', rel: 'video' do
+      - if video.thumbnail?
+        = image_tag video.thumbnail.thumb.url, class: "img-responsive", alt: video.title
+      - else
+        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: video.title
+  .visible-xs
+    = link_to video_path(video) do
+      - if video.thumbnail?
+        = image_tag video.thumbnail.thumb.url, class: "img-responsive", alt: video.title
+      - else
+        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: video.title
+  
+
+  %h4.title
+    = link_to video_path(video) do
+      = video.title
+  %p
+    %small
+      %span.glyphicon.glyphicon-time
+      = Time.at(video.duration).utc.strftime("%H:%M:%S")
+    %br
+
+    - if video.user
+      = link_to user_path(video.user) do
+        %small
+        %span.glyphicon.glyphicon-user
+        = video.user.full_name
+      %br
+    
+    %small
+      %span.glyphicon.glyphicon-file
+      Posted
+      = time_ago_in_words(video.created_at)
+      ago
+    %br
+
+    %small
+      = video.subtitles.count
+      subtitles
+  %p
+    = sanitize(truncate(video.description, :omission => "...", :length => 40))

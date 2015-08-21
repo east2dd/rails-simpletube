@@ -1,14 +1,81 @@
-- @videos.each do |video|
-  .col-sm-3
-    = link_to video_path(video.id) do
-      - if video.thumbnail?
-        = image_tag video.thumbnail.thumb.url, class: "img-responsive"
-      - else
-        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive"
-    %h4
-      = link_to video_path(video.id) do
-        = video.title
-    %p= video.description
-    %p= Time.at(video.duration).utc.strftime("%H:%M:%S")
-    %p
-      %small= video.created_at
+- content_for :before_content do
+  #carousel.visible-sm.visible-md.visible-lg
+    .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
+      - Photo.featured.take(8).to_a.shuffle.each do |photo|
+        = link_to photo.file.url do
+          = image_tag photo.file.thumb.url, title: photo.title, style: 'max-height: 340px;', alt: photo.title
+%br
+%br
+
+
+.row
+  .col-sm-4
+    %h3.page-title Videos
+    #gallery1
+      .row
+        .col-sm-12
+          - Video.recent.take(1).each do |video|
+            = render video
+          = link_to videos_path do
+            %span.glyphicon.glyphicon-eye-open
+            SEE MORE VIDEOS
+  .col-sm-4
+    %h3.page-title Playlists
+    #gallery2
+      .row
+        .col-sm-12
+          - Playlist.all.take(1).each do |playlist|
+            = render playlist
+          = link_to playlists_path do
+            %span.glyphicon.glyphicon-eye-open
+            SEE MORE PLAYLISTS
+  .col-sm-4
+    %h3.page-title Photos
+    #gallery3
+      .row
+        .col-sm-12
+          - Photo.recent.take(1).each do |photo|
+            = render photo
+          = link_to photos_path do
+            %span.glyphicon.glyphicon-eye-open
+            SEE MORE PHOTOS
+%br
+%br
+%br
+%br
+%br
+%h3.page-title Administrators
+#founders
+  .row
+    - User.admin.order(email: 'asc').each do |u|
+      - if u.avatar?
+        .col-sm-2
+          .founder.text-center
+            = link_to user_path(u) do
+              = image_tag u.avatar.thumb.url, class: 'img-responsive', alt: u.full_name, title: u.full_name
+            %br
+            = u.full_name
+
+%br
+%br
+%br
+%br
+%br
+%h3.page-title Contributors
+#founders
+  .row
+    - User.all.each do |u|
+      - if u.full_name!="UnNamed" && !u.admin?
+        .col-sm-2
+          .founder.text-center
+            = render u
+            %br
+            %br
+
+:javascript
+  $(function(){
+    $('#gallery1').photobox('a.video',{ time:1000, zoomable: false, loop: false, single: true});
+    $('#gallery2').photobox('a.video',{ time:1000, zoomable: false, loop: false, single: true});
+    $('#gallery3').photobox('a.photo',{ time:1000, zoomable: false, loop: false, single: true});
+    $('#carousel').photobox('a',{ time: 0, loop: false });
+  });

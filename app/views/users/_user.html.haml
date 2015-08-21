@@ -1,0 +1,15 @@
+= link_to user_path(user) do
+  - if user.avatar?
+    = image_tag user.avatar.thumb.url, class: 'img-responsive', alt: user.full_name, title: user.full_name
+  - else
+    = image_tag "no-avatar.jpg", class: 'img-responsive', alt: user.full_name, title: user.full_name
+%br
+= user.full_name
+%br
+%small
+  = user.videos.count
+  videos
+,
+%small
+  = user.photos.count
+  photos
