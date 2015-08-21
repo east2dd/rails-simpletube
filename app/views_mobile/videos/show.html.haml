@@ -1,0 +1,211 @@
+- content_for :sidebar do
+  = render 'sidebar'
+
+:javascript
+  var subtitles = #{@video.subtitles.to_json};
+  var video = #{@video.to_json};
+  var current_subtitle_index = null;
+  var currentSubtitle = null;
+  var start_at = 0;
+  var repeat = false
+
+  var seekToVideo = function seekToVideo(index, rep){
+    repeat = rep
+
+    var subtitle = $('#subtitle_' + index);
+    currentSubtitle = subtitles[index];
+    updateCurrentSubtitleHtml(currentSubtitle);
+    $('#movie').get(0).currentTime = currentSubtitle.start_at;
+    $('.repeat .text').html('');
+    if(rep){
+      $('.repeat .text', subtitle).html('<small>repeating...</small>');
+    }else{
+      $('.repeat .text', subtitle).html('');
+    }
+  }
+
+  var updateCurrentSubtitleHtml = function(subtitle){
+    if(subtitle){
+      $('#subtitle').html(subtitle.title);
+      if(subtitle.description){
+        var description = subtitle.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+        $('#description').html(description);
+      }else{
+        $('#description').html(video.description);
+      }
+    }
+  }
+
+  var getCurrentSubtitle = function(subtitles, currentTime){
+    for(var i=0;i<subtitles.length;i++){
+      if(currentTime > subtitles[i].start_at && currentTime < subtitles[i].end_at){
+        return subtitles[i];
+      }
+    }
+    return {};
+  }
+
+  $(function(){
+    var movie = $('#movie').get(0);
+    for(var i=0;i<subtitles.length;i++){
+      if (subtitles[i+1]){
+        subtitles[i].end_at = subtitles[i].end_at || subtitles[i+1].start_at;
+      }else{
+        subtitles[i].end_at = subtitles[i].end_at || 9999999999;
+      }
+    }
+
+    $(movie).bind('timeupdate', function() {
+      if(currentSubtitle && movie.currentTime > currentSubtitle.end_at && repeat==true){
+        movie.currentTime = currentSubtitle.start_at;
+      }
+
+      subtitle = getCurrentSubtitle(subtitles, movie.currentTime);
+      updateCurrentSubtitleHtml(subtitle);
+    })
+
+    // display comments at start
+    $('.thread a').trigger('click');
+
+    // seek when press arrow keys
+    var frameTime = 5;
+    window.addEventListener('keydown', function (evt) {
+      if (true) { //or you can force it to pause here
+          if (evt.keyCode === 37) { //left arrow
+              if (movie.currentTime > 0) {
+                  //one frame back
+                  movie.currentTime -= frameTime;
+              }
+          } else if (evt.keyCode === 39) { //right arrow
+
+              if (movie.currentTime < movie.duration) {
+                  //one frame forward
+                  //Don't go past the end, otherwise you may get an error
+                  movie.currentTime = Math.min(movie.duration, movie.currentTime + frameTime);
+              }
+          }
+      }
+    });
+  });
+
+  function captureSubtitlePosition(){
+    $('#movie').get(0).pause();
+    $('#video_at').val($('#movie').get(0).currentTime);
+    if (confirm('Are you sure?')){
+      $('#photo_form').submit();
+    }
+  }
+
+.row
+  .col-sm-12
+    %h3#title
+      =@video.title
+    %p
+      = link_to like_video_path(@video), method: :put, class: 'btn btn-primary btn-sm' do
+        %span.glyphicon.glyphicon-thumbs-up
+        Like
+        = "( #{@video.get_upvotes.size} )"
+      &nbsp;
+
+      = link_to dislike_video_path(@video), method: :put, class: 'btn btn-danger btn-sm' do
+        %span.glyphicon.glyphicon-thumbs-down
+        Dislike
+        = "( #{@video.get_downvotes.size} )"
+      &nbsp;
+
+      - if @video.marked_as? :favorite, :by => current_user
+        = link_to unfavorite_video_path(@video), method: :post, class: 'btn btn-danger btn-sm' do
+          %span.glyphicon.glyphicon-star-empty
+          Unfavorite
+      - else
+        = link_to favorite_video_path(@video), method: :post, class: 'btn btn-warning btn-sm' do
+          %span.glyphicon.glyphicon-star
+          Favorite
+      &nbsp;
+
+      = link_to download_video_path(@video) do
+        %span.glyphicon.glyphicon-download-alt
+        Download
+      &nbsp;
+
+      = link_to edit_admin_video_path(@video) do
+        %span.glyphicon.glyphicon-edit
+        Edit
+
+      .glyphicon.glyphicon-time
+      = Time.at(@video.duration).utc.strftime("%H:%M:%S")
+      &nbsp;
+
+      - if @video.user
+        %small
+          %span.glyphicon.glyphicon-user
+          Posted by #{@video.user.email}
+        &nbsp;
+
+      %small
+        %span.glyphicon.glyphicon-file
+        = time_ago_in_words(@video.created_at)
+        ago
+
+      &nbsp;
+      %small
+        %span.glyphicon.glyphicon-eye-open
+        = @video.impressionist_count
+        visits (today #{@video.impressionist_count(:start_date=>Time.now.strftime("%Y-%m-%d"))})
+
+      
+    .row
+      .col-sm-12
+        %p
+          %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> true}
+            %source{:src => @video.file.url, :type => "video/mp4"}
+
+        = form_tag capture_photo_video_path(@video), id: 'photo_form' do
+          = hidden_field_tag :video_at
+          %p
+            = link_to "javascript: void(0); captureSubtitlePosition();", class: 'btn btn-primary', method: :post do
+              %span.glyphicon.glyphicon-camera
+              Capture And Post Photo
+
+
+        %h4#subtitle
+          =@subtitle.try(:title)
+        #description
+          = sanitize(simple_format(@video.description))
+        %hr
+    - if @video.subtitles.count > 0
+      .row
+        .col-sm-12
+          .row
+            - @video.subtitles.each_with_index do |subtitle, index|
+              .col-md-2.col-sm-3.col-xs-3
+                %div{ id: "subtitle_#{index}"}
+                  - if subtitle.id == @subtitle.try(:id)
+                    :javascript
+                      setTimeout(function(){ seekToVideo(#{index}, false); }, 500);
+                  %p
+                    = link_to "#title", onclick: "seekToVideo(#{index}, false);" do
+                      = image_tag subtitle.thumbnail.thumb.url, class: 'img-responsive'
+                  %p.text-center
+                    =link_to '#title', onclick: "seekToVideo(#{index}, !repeat);", class: 'repeat btn btn-xs' do
+                      %span.glyphicon.glyphicon-repeat
+                      %span.text
+                    - unless (current_user && current_user.playlist && current_user.playlist.plays.include?(subtitle.play))
+                      =link_to add_to_playlist_subtitle_path(subtitle), method: :post do
+                        %span.glyphicon.glyphicon-plus
+                        playlist
+                    %br
+                    %small
+                      = Time.at((subtitle.end_at||subtitle.video.duration) - subtitle.start_at).utc.strftime("%H:%M:%S")
+                    %br
+                    %small
+                      =subtitle.title
+                      =link_to edit_admin_video_subtitle_path(subtitle.video, subtitle) do
+                        %span.glyphicon.glyphicon-edit
+              - if (index+1)%6==0
+                .clearfix
+    
+      %hr
+    .clearfix
+      = commontator_thread(@video)
+%br
