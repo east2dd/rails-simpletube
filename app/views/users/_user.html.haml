@@ -1,8 +1,8 @@
 = link_to user_path(user) do
   - if user.avatar?
-    = image_tag user.avatar.thumb.url, class: 'img-responsive', alt: user.full_name, title: user.full_name
+    = image_tag user.avatar.thumb.url, alt: user.full_name, title: user.full_name, style: 'max-width: 150px;'
   - else
-    = image_tag "no-avatar.jpg", class: 'img-responsive', alt: user.full_name, title: user.full_name
+    = image_tag "no-avatar.jpg", alt: user.full_name, title: user.full_name, style: 'max-width: 150px;'
 %br
 = user.full_name
 %br

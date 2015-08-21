@@ -1,0 +1,51 @@
+- content_for :sidebar do
+  = render 'sidebar'
+- content_for :before_content do
+  #carousel.visible-sm.visible-md.visible-lg
+    .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
+      - Video.featured.take(12).to_a.shuffle.each do |video|
+        = link_to video_path(video) do
+          = image_tag video.thumbnail.thumb.url, title: video.title
+          %span.subtitle
+            = truncate(video.title, :omission => "...", :length => 12)
+- content_for :search_box do
+  .clearfix
+    = bootstrap_form_tag url: search_videos_path, method: :get, layout: :inline do |f|
+      = f.text_field :search, hide_label: true, placeholder: 'Search videos'
+.clearfix
+  - if @title
+    %h4
+      = @title
+  - if @category
+    %h4
+      %span.glyphicon.glyphicon-folder-open
+      &nbsp;
+      =@category.name
+
+  - if @tag
+    %h4
+      %span.glyphicon.glyphicon-tags
+      &nbsp;
+      = @tag
+  - if params[:search]
+    %h4
+      %span.glyphicon.glyphicon-search
+      &nbsp;
+      = params[:search]
+
+
+- if @videos.count > 0
+  #gallery
+    = render 'list'
+    .clearfix
+      = paginate @videos
+- else
+  .row
+    .alert.alert-warning
+      Sorry, There is no matched videos.
+
+:javascript
+  $(function(){
+    $('#gallery').photobox('a.img-video',{ time:1000, zoomable: false, loop: false});
+  });
+  

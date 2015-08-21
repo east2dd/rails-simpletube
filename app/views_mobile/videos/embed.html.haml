@@ -1,0 +1,130 @@
+:javascript
+  var subtitles = #{@video.subtitles.to_json};
+  var video = #{@video.to_json};
+  var current_subtitle_index = null;
+  var currentSubtitle = null;
+  var start_at = 0;
+  var repeat = false
+
+  var seekToVideo = function seekToVideo(index, rep){
+    repeat = rep
+
+    var subtitle = $('#subtitle_' + index);
+    currentSubtitle = subtitles[index];
+    updateCurrentSubtitleHtml(currentSubtitle);
+    $('#movie').get(0).currentTime = currentSubtitle.start_at;
+
+    $('.repeat .text').html('');
+    if(rep){
+      $('.repeat .text', subtitle).html('<small>repeating...</small>');
+    }else{
+      $('.repeat .text', subtitle).html('');
+    }
+  }
+
+  var updateCurrentSubtitleHtml = function(subtitle){
+    if(subtitle){
+      $('#subtitle').html(subtitle.title);
+      if(subtitle.description){
+        var description = subtitle.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+        $('#description').html(description);
+      }else{
+        $('#description').html(video.description);
+      }
+    }
+  }
+
+  var getCurrentSubtitle = function(subtitles, currentTime){
+    for(var i=0;i<subtitles.length;i++){
+      if(currentTime > subtitles[i].start_at && currentTime < subtitles[i].end_at){
+        return subtitles[i];
+      }
+    }
+    return {};
+  }
+
+  $(function(){
+    var movie = $('#movie').get(0);
+    for(var i=0;i<subtitles.length;i++){
+      if (subtitles[i+1]){
+        subtitles[i].end_at = subtitles[i].end_at || subtitles[i+1].start_at;
+      }else{
+        subtitles[i].end_at = subtitles[i].end_at || 9999999999;
+      }
+    }
+
+    $(movie).bind('timeupdate', function() {
+      if(currentSubtitle && movie.currentTime > currentSubtitle.end_at && repeat==true){
+        movie.currentTime = currentSubtitle.start_at;
+      }
+
+      subtitle = getCurrentSubtitle(subtitles, movie.currentTime);
+      updateCurrentSubtitleHtml(subtitle);
+    })
+
+    // display comments at start
+    $('.thread a').trigger('click');
+
+    // seek when press arrow keys
+    var frameTime = 5;
+    window.addEventListener('keydown', function (evt) {
+      if (true) { //or you can force it to pause here
+          if (evt.keyCode === 37) { //left arrow
+              if (movie.currentTime > 0) {
+                  //one frame back
+                  movie.currentTime -= frameTime;
+              }
+          } else if (evt.keyCode === 39) { //right arrow
+
+              if (movie.currentTime < movie.duration) {
+                  //one frame forward
+                  //Don't go past the end, otherwise you may get an error
+                  movie.currentTime = Math.min(movie.duration, movie.currentTime + frameTime);
+              }
+          }
+      }
+    });
+  });
+
+%h4#title.clearfix
+  =@video.title
+
+  = link_to video_path(@video), class: 'btn btn-primary pull-right', target: '_parent' do
+    %span.glyphicon.glyphicon-send
+    Open
+%p
+  .glyphicon.glyphicon-time
+  = Time.at(@video.duration).utc.strftime("%H:%M:%S")
+
+
+.row
+  .col-sm-12
+    %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "100%", :autoplay=> false}
+      %source{:src => @video.file.url, :type => "video/mp4"}
+    - if @subtitle
+      %h4#subtitle
+        =@subtitle.title
+    #description
+      = sanitize(simple_format(@video.description))
+.row
+  .col-sm-12
+    - @video.subtitles.each_with_index do |subtitle, index|
+      .row
+        .col-xs-3
+          %div{ id: "subtitle_#{index}"}
+            - if subtitle.id == @subtitle.try(:id)
+              :javascript
+                seekToVideo(#{index}, false);
+          = link_to "javscript: void(0);", onclick: "seekToVideo(#{index}, false);" do
+            = image_tag subtitle.thumbnail.thumb.url, class: 'img-responsive'
+        .col-xs-9
+          %p
+            %small
+              =subtitle.title
+            %br
+            %small
+              = Time.at(subtitle.start_at).utc.strftime("%H:%M:%S")
+            %br
+            =link_to '#title', onclick: "seekToVideo(#{index}, !repeat);", class: 'repeat' do
+              %span.glyphicon.glyphicon-repeat
+              %span.text

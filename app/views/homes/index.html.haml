@@ -10,35 +10,41 @@
 
 .row
   .col-sm-4
-    %h3.page-title Videos
+    %h3.page-title 
+      = link_to videos_path do
+        %span.glyphicon.glyphicon-film
+        Videos
     #gallery1
       .row
         .col-sm-12
           - Video.recent.take(1).each do |video|
             = render video
-          = link_to videos_path do
-            %span.glyphicon.glyphicon-eye-open
-            SEE MORE VIDEOS
+          %br
+          %br
   .col-sm-4
-    %h3.page-title Playlists
+    %h3.page-title
+      = link_to playlists_path do
+        %span.glyphicon.glyphicon-play
+        Playlists
     #gallery2
       .row
         .col-sm-12
           - Playlist.all.take(1).each do |playlist|
             = render playlist
-          = link_to playlists_path do
-            %span.glyphicon.glyphicon-eye-open
-            SEE MORE PLAYLISTS
+          %br
+          %br
   .col-sm-4
-    %h3.page-title Photos
+    %h3.page-title
+      = link_to photos_path do
+        %span.glyphicon.glyphicon-picture
+        Photos
     #gallery3
       .row
         .col-sm-12
           - Photo.recent.take(1).each do |photo|
             = render photo
-          = link_to photos_path do
-            %span.glyphicon.glyphicon-eye-open
-            SEE MORE PHOTOS
+          %br
+          %br
 %br
 %br
 %br
@@ -52,7 +58,7 @@
         .col-sm-2
           .founder.text-center
             = link_to user_path(u) do
-              = image_tag u.avatar.thumb.url, class: 'img-responsive', alt: u.full_name, title: u.full_name
+              = image_tag u.avatar.thumb.url, alt: u.full_name, title: u.full_name, style: 'max-width: 150px;'
             %br
             = u.full_name
 
