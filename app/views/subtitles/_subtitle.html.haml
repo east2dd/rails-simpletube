@@ -1,18 +1,11 @@
 - video = subtitle.video
 .row.video
   .col-sm-4
-    .visible-sm.visible-md.visible-lg
-      = link_to embed_video_path(video, subtitle_id: subtitle.id) + '#title', class: 'video', rel: 'video' do
-        - if video.thumbnail?
-          = image_tag subtitle.thumbnail.thumb.url, class: "img-responsive", alt: subtitle.title
-        - else
-          = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: subtitle.title
-    .visible-xs
-      = link_to video_path(video, subtitle_id: subtitle.id) + '#title' do
-        - if video.thumbnail?
-          = image_tag subtitle.thumbnail.thumb.url, class: "img-responsive", alt: subtitle.title
-        - else
-          = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: subtitle.title
+    = link_to embed_video_path(video, subtitle_id: subtitle.id) + '#title', class: 'img-video', rel: 'video' do
+      - if video.thumbnail?
+        = image_tag subtitle.thumbnail.thumb.url, class: "img-responsive", alt: subtitle.title
+      - else
+        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: subtitle.title
     
   .col-sm-8
     %h4.title

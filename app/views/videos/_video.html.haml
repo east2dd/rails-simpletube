@@ -1,5 +1,5 @@
 .video
-  = link_to embed_video_path(video), class: 'video', rel: 'video' do
+  = link_to embed_video_path(video), class: 'img-video', rel: 'video' do
     - if video.thumbnail?
       = image_tag video.thumbnail.thumb.url, class: "img-responsive thumbnail", alt: video.title
     - else

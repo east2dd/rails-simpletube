@@ -1,7 +1,7 @@
 - subtitle = playlist.plays.first.playable
 - video = subtitle.video
 .video
-  = link_to embed_video_path(video, subtitle_id: subtitle.id) + '#title', class: 'video', rel: 'video' do
+  = link_to embed_video_path(video, subtitle_id: subtitle.id) + '#title', class: 'img-video', rel: 'video' do
     - if video.thumbnail?
       = image_tag subtitle.thumbnail.thumb.url, class: "img-responsive thumbnail", alt: subtitle.title
     - else
