@@ -2,11 +2,12 @@
   = render 'sidebar'
 - content_for :search_box do
   .clearfix
-    = bootstrap_form_tag url: search_photos_path, method: :get, layout: :inline do |f|
-      = f.text_field :search, hide_label: true, placeholder: 'Search photos'
-      = f.button :search, class: 'btn btn-info hidden-xs' do
-        %span.glyphicon.glyphicon-search
-        Search
+    .pull-right
+      = bootstrap_form_tag url: search_photos_path, method: :get, layout: :inline do |f|
+        = f.text_field :search, hide_label: true, placeholder: 'Search photos'
+        = f.button :search, class: 'btn btn-info hidden-xs' do
+          %span.glyphicon.glyphicon-search
+          Search
 - content_for :before_content do
   #carousel.visible-sm.visible-md.visible-lg
     .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
