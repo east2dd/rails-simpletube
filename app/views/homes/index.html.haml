@@ -47,7 +47,7 @@
 %h3.page-title Administrators
 #founders
   .row
-    - User.admin.order(email: 'asc').each do |u|
+    - User.admin.each do |u|
       - if u.avatar?
         .col-sm-2
           .founder.text-center
