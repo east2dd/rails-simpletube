@@ -1,19 +1,9 @@
 %h3.page-title Playlists
 
-%table.table.table-striped
+.row
   - @playlists.each do |playlist|
-    - unless playlist.plays.blank?
-      %tr
-        %td.col-sm-2
-          = link_to playlist_path(playlist) do
-            = image_tag playlist.plays.first.playable.thumbnail_url, class: 'img-responsive'
-        %td
-          = link_to playlist_path(playlist) do
-            %span.glyphicon.glyphicon-play
-            = playlist.name
-        %td
-          = playlist.plays.map(&:playable).map(&:title).join(' ,')
-        %td
-          = playlist.user.try(:full_name)
-          %br
-          = playlist.user.try(:email)
+    - if playlist.plays.count > 0
+      .col-sm-6
+        = render playlist
+        %p
+          = playlist.plays.collect{|p| p.playable}.map(&:title).join(',')
