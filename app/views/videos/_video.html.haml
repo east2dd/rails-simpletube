@@ -1,17 +1,9 @@
 .video
-  .visible-sm.visible-md.visible-lg
-    = link_to embed_video_path(video), class: 'video', rel: 'video' do
-      - if video.thumbnail?
-        = image_tag video.thumbnail.thumb.url, class: "img-responsive", alt: video.title
-      - else
-        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: video.title
-  .visible-xs
-    = link_to video_path(video) do
-      - if video.thumbnail?
-        = image_tag video.thumbnail.thumb.url, class: "img-responsive", alt: video.title
-      - else
-        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: video.title
-  
+  = link_to embed_video_path(video), class: 'video', rel: 'video' do
+    - if video.thumbnail?
+      = image_tag video.thumbnail.thumb.url, class: "img-responsive thumbnail", alt: video.title
+    - else
+      = image_tag asset_path('no-thumbnail.png'), class: "img-responsive thumbnail", alt: video.title
 
   %h4.title
     = link_to video_path(video) do

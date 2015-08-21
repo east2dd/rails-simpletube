@@ -1,16 +1,10 @@
 .item.photo
-  .visible-sm.visible-md.visible-lg
-    = link_to photo.file.full.url, class: 'photo' do
-      - if photo.file?
-        = image_tag photo.file.thumb.url, class: "img-responsive", alt: photo.title
-      - else
-        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: photo.title
-  .visible-xs
-    = link_to photo_path(photo) do
-      - if photo.file?
-        = image_tag photo.file.thumb.url, class: "img-responsive", alt: photo.title
-      - else
-        = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: photo.title
+  = link_to photo.file.full.url, class: 'img-photo' do
+    - if photo.file?
+      = image_tag photo.file.thumb.url, class: "img-responsive thumbnail", alt: photo.title
+    - else
+      = image_tag asset_path('no-thumbnail.png'), class: "img-responsive", alt: photo.title
+
   
   %h4.title
     = link_to photo_path(photo) do
