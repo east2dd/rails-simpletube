@@ -11,7 +11,7 @@
     .slideshow{ :"data-cycle" => { fx: 'carousel', timeout: 3000, slides: '>a' } }
       - Photo.featured.to_a.shuffle.each do |photo|
         = link_to photo.file.url do
-          = image_tag photo.file.preview.url, title: photo.title, style: 'max-height: 340px;', alt: photo.title
+          = image_tag photo.file.thumb.url, title: photo.title, style: 'max-height: 340px;', alt: photo.title
 
 
 #gallery
