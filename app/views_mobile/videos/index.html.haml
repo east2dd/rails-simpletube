@@ -12,6 +12,8 @@
   .clearfix
     = bootstrap_form_tag url: search_videos_path, method: :get, layout: :inline do |f|
       = f.text_field :search, hide_label: true, placeholder: 'Search videos'
+    %br
+    %br
 .clearfix
   - if @title
     %h4
