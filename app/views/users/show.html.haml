@@ -14,7 +14,7 @@
         = link_to "View all videos (#{@user.videos.count})", videos_user_path(@user)
   #gallery1
     .row
-      - @user.videos.take(4).each do |video|
+      - @user.videos.recent.take(4).each do |video|
         .col-sm-3
           = render video
   %hr
@@ -27,7 +27,7 @@
         = link_to "View all photos (#{@user.photos.count})", photos_user_path(@user)
   #gallery2
     .row
-      - @user.photos.take(4).each do |photo|
+      - @user.photos.recent.take(4).each do |photo|
         .col-sm-3
           = render photo
 
