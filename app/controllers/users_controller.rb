@@ -5,11 +5,11 @@ class UsersController < ApplicationController
 
   def photos
     @user = User.find(params[:id])
-    @photos = @user.photos.page(params[:page])
+    @photos = @user.photos.recent.page(params[:page])
   end
 
   def videos
     @user = User.find(params[:id])
-    @videos = @user.videos.page(params[:videos])
+    @videos = @user.videos.recent.page(params[:videos])
   end
 end
