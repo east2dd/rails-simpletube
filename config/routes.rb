@@ -57,7 +57,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :playlists
+  resources :playlists do
+    member do
+      get :embed
+    end
+  end
   resources :plays
   resources :photos do
     member do
