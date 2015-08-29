@@ -9,6 +9,8 @@ class PhotoPolicy
   def update?
     return true if @photo.user.blank?
     return true if @photo.user == user
+    return false if user.blank?
+    return true if user.level == 9
     return false if @photo.user && @photo.user.admin? && (@photo.user!=user)
     user.admin?
   end
