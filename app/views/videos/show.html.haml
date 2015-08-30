@@ -157,7 +157,7 @@
     .row
       .col-sm-12
         %p
-          %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "#{@video.width < 1024? @video.width.to_s + "px" : "100%" rescue "100%"}", :autoplay=> true}
+          %video#movie{:controls => "", :height => "auto", :poster => @video.thumbnail.url, :preload => "none", :width => "#{(@video.width < 1024 and @video.width>0)? @video.width.to_s + "px" : "100%" rescue "100%"}", :autoplay=> true}
             %source{:src => @video.file.url, :type => "video/mp4"}
 
         = form_tag capture_photo_video_path(@video), id: 'photo_form' do
