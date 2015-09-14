@@ -13,6 +13,9 @@
         = link_to photo.file.url do
           = image_tag photo.file.thumb.url, title: photo.title, style: 'max-height: 340px;', alt: photo.title
 
+.clearfix
+  .pull-right
+    = paginate @photos
 
 #gallery
   .row
